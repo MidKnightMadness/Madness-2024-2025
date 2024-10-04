@@ -9,9 +9,9 @@ public class ClawTester extends OpMode {
     Servo servo;
     Timer timer;
 
-    double LEFT_BOUNDS = 0.4;
+    double LEFT_BOUNDS = 0.3;
     double RIGHT_BOUNDS = 0.7;
-    double NEUTRAL_VALUE = 0.5;
+    double NEUTRAL_VALUE = 0.56;
     double change = 0.1;
 
 

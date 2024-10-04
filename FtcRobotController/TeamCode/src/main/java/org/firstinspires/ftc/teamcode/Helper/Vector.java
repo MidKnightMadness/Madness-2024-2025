@@ -23,6 +23,16 @@ public class Vector {
         return y;
     }
 
+    public void scaleVector(int scalar){
+        this.x *= scalar;
+        this.y *= scalar;
+        this.magnitude *= scalar;
+    }
+
+    public double angle(){
+        return Math.atan(this.y / this.x);
+    }
+
 
 
 }

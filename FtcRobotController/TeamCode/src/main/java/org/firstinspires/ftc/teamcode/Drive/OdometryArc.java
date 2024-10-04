@@ -97,35 +97,42 @@ public class OdometryArc {
         telemetry.addData("Update Rate", getUpdateRate());
     }
 
-    private double getUpdateRate() {
+    public double getUpdateRate() {
         return 1 / (currentTime - previousTime);
     }
 
-    private double getTotalTime() {
+    public double getTotalTime() {
         return currentTime;
     }
 
-    private double getVelocityY() {
+    public double getVelocityY() {
         return velocity[1];
     }
 
-    private double getVelocityX() {
+    public double getVelocityX() {
         return velocity[0];
     }
+    public double getAccelerationX(){
+        return velocity[0] / getUpdateRate();
+    }
 
-    private double getRotationDegrees() {
+    public double getAccelerationY(){
+        return velocity[1] / getUpdateRate();
+    }
+
+    public double getRotationDegrees() {
         return position[2] * 180 / Math.PI;
     }
 
-    private double getRotationRadians(){
+    public double getRotationRadians(){
         return position[2];
     }
 
-    private double getYCoordinate() {
+    public double getYCoordinate() {
         return position[1];
     }
 
-    private double getXCoordinate() {
+    public double getXCoordinate() {
         return position[0];
     }
 
