@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Intake;
+package org.firstinspires.ftc.teamcode.EndEffector;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
