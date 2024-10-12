@@ -27,9 +27,9 @@ public class OdometryLinear {
 
         this.position = starting;//x, y, theta
 
-        leftEncoder = hardwareMap.get(DcMotor.class, "left");
-        rightEncoder = hardwareMap.get(DcMotor.class, "right");
-        frontEncoder = hardwareMap.get(DcMotor.class, "front");
+        leftEncoder = hardwareMap.get(DcMotor.class, "FL");
+        rightEncoder = hardwareMap.get(DcMotor.class, "FR");
+        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
 
         elapsedTime = new ElapsedTime();
         elapsedTime.startTime();

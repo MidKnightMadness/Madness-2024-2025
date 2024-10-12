@@ -25,9 +25,9 @@ public class OdometryArc {
 
     public OdometryArc(HardwareMap hardwareMap, Telemetry telemetry, double[] initial){
 
-        leftEncoder = hardwareMap.get(DcMotor.class, "left");
-        rightEncoder = hardwareMap.get(DcMotor.class, "right");
-        frontEncoder = hardwareMap.get(DcMotor.class, "front");
+        leftEncoder = hardwareMap.get(DcMotor.class, "FL");
+        rightEncoder = hardwareMap.get(DcMotor.class, "FR");
+        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
 
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
