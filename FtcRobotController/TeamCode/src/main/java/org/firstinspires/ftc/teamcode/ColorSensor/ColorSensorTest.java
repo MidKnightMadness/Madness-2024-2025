@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.ColorSensor;
 //implement this class into Auto/TeleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
+@TeleOp(name = "Color Sensor")
 public class ColorSensorTest extends OpMode {
     ColorSensor colorSensor;
     ColorSensorWrapper colorSensorWrapper;
@@ -33,7 +35,7 @@ public class ColorSensorTest extends OpMode {
         telemetry.addData("RGB Values", rgbColor.toString());
         telemetry.addData("Time", timer.updateTime());
         
-
+        telemetry.update();
 
     }
 
