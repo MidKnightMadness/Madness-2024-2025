@@ -11,6 +11,13 @@ public class MecanumDrive {
     public DcMotorEx FR;
     public DcMotorEx BL;
     public DcMotorEx BR;
+
+    double FLmulti = 1;
+    double FRmulti = 1;
+    double BLmulti = 1;
+    double BRmulti = 1;
+    
+    
     Telemetry telemetry;
     private double[] motorInputs;
     private double[] motorFinalInputs;
@@ -44,7 +51,7 @@ public class MecanumDrive {
         double BRPower = y + x - rotation;
 
 
-        motorInputs = new double[]{FLPower, FRPower, BLPower, BRPower};
+        motorInputs = new double[]{FLPower * FLmulti, FRPower * FRmulti, BLPower * BLmulti, BRPower * BRmulti};
         double maxPower = 0;
 
         for(int i = 0; i < 4; i++){
