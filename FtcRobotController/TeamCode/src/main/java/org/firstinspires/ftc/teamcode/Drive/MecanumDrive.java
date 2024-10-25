@@ -12,6 +12,7 @@ public class MecanumDrive {
     public DcMotorEx BL;
     public DcMotorEx BR;
 
+    //RPM Constants
     double FLmulti = 1;
     double FRmulti = 1;
     double BLmulti = 1;
