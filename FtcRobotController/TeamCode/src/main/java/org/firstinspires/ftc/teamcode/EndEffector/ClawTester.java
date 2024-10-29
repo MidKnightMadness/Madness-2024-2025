@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.EndEffector;
 
-import static android.provider.SyncStateContract.Helpers.update;
-
-import android.widget.Button;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -13,16 +9,30 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ColorSensor.ColorClassifier;
 import org.firstinspires.ftc.teamcode.ColorSensor.ColorSensorWrapper;
-import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
+import org.firstinspires.ftc.teamcode.ColorSensor.SampleColors;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 @TeleOp(name = "Claw")
 @Config
 public class ClawTester extends OpMode {
-    Servo servo;
+    ServoSmooth servoSmooth;
     Timer timer;
+    Timer ServoTimer;
+
+
+
 
     double LEFT_BOUNDS = 0.4;
     double RIGHT_BOUNDS = 0.635;
@@ -35,19 +45,27 @@ public class ClawTester extends OpMode {
     FtcDashboard ftcDashboard;
     TelemetryPacket packet;
     Telemetry telemetryPacket;
-    double position;
+
     ColorSensor colorSensor;
     ColorSensorWrapper colorSensorWrapper;
     public int bufferSize = 3;
 
-    @Override
-    public void init() {
-        servo = hardwareMap.get(Servo.class, "claw grabber");
-        timer = new Timer();
+    SampleColors.Colors detected = SampleColors.Colors.NONE;
 
-        servo.setPosition(NEUTRAL_VALUE);
-        telemetry.addData("Servo Position: ", servo.getPosition());
-        position = servo.getPosition();
+    @Override
+    public void init(){
+        servoSmooth = new ServoSmooth(hardwareMap, telemetry);
+        ServoTimer = new Timer();
+
+
+        try {
+            servoSmooth.setToPosition(NEUTRAL_VALUE);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        telemetry.addData("Servo Position: ", servoSmooth.getPosition());
+        position = servoSmooth.getPosition();
 
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, bufferSize);
@@ -63,36 +81,98 @@ public class ClawTester extends OpMode {
     boolean previousDpadD;
     //double targetPos = 0.5;
 
+    boolean previousGamepadLB;
+    boolean previousGamepadRB;
+    boolean closeRight;
+    boolean closeLeft;
+
+
+
+    public static double Kp = 0.1;
+
+    public static double position;
     @Override
     public void loop() {
 
         colorSensorWrapper.update();
         RGBColor rgbColor = colorSensorWrapper.getValue();
 
+        detected = ColorClassifier.classify(rgbColor);
+
         telemetry.addData("RGB Values", rgbColor.toString());
-        telemetry.addData("Time", timer.updateTime());
+        telemetry.addData("Detected Color", detected);
 
 
         //servo.
         //boolean a .update(gamepad1.a);
-//        ftcDashboard = FtcDashboard.getInstance();
+        ftcDashboard = FtcDashboard.getInstance();
 //        packet.fieldOverlay().setFill("gray").fillRect(-15, 15, 20, 20);
 //        telemetryPacket = ftcDashboard.getTelemetry();
 //
 //        telemetryPacket.update();
 
-        if (gamepad1.left_bumper) {//set to max closed bounds
-            //targetPos += change;
-            servo.setPosition(LEFT_BOUNDS);
-//            servo.setPosition(servo.getPosition()+change);
+//        if (gamepad1.left_bumper) {//set to max closed bounds
+//            ServoTimer = new Timer();
+//            //targetPos += change;
+////            try {
+////                servoSmooth.setToPosition(LEFT_BOUNDS);
+////            } catch (InterruptedException e) {
+////                throw new RuntimeException(e);
+////            }
+////            servo.setPosition(servo.getPosition()+change);
+//
+//            double error = servoSmooth.getPosition() - LEFT_BOUNDS;
+//            while(error > 0.01){
+//
+//                double value = servoSmooth.motionProfiledSetPosition(Math.abs(LEFT_BOUNDS - servoSmooth.getPosition()), 250, 500, ServoTimer.updateTime());
+//
+//                position = -1 * (servoSmooth.getPosition() - value) * Kp;
+//
+//                servoSmooth.servo.setPosition(position);
+//            }
+//
+//        }
 
-        }
-
-
-        if (gamepad1.right_bumper) {//set to open bounds
+        if (gamepad1.right_bumper && previousGamepadRB == false) {//set to open bounds
             //targetPos -= change;
-                servo.setPosition(RIGHT_BOUNDS);
+//            try {
+//                servoSmooth.setToPosition(RIGHT_BOUNDS);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+
+            ServoTimer = new Timer();
+            closeRight = true;
         }
+
+        if(closeRight == true){
+            double error = RIGHT_BOUNDS - servoSmooth.getPosition();
+
+            if(error > 0.01) {
+                double value = servoSmooth.motionProfiledSetPosition(Math.abs(RIGHT_BOUNDS - NEUTRAL_VALUE), 0.2, 0.35, ServoTimer.updateTime(), telemetry);
+
+                position = (value + LEFT_BOUNDS);
+                double power = position - (servoSmooth.getPosition() - LEFT_BOUNDS);
+                telemetry.addData("Power", power);
+                servoSmooth.setDirectly(power * Kp);
+            }
+            else{
+                closeRight = false;
+            }
+        }
+
+        if(gamepad1.right_stick_x > 0.5){
+            servoSmooth.setDirectly(RIGHT_BOUNDS);
+        }
+
+        if(gamepad1.left_stick_x > 0.5){
+            servoSmooth.setDirectly(LEFT_BOUNDS);
+        }
+
+
+        previousGamepadRB = gamepad1.right_bumper;
+        previousGamepadLB = gamepad1.left_bumper;
+
         if(gamepad1.dpad_left && previousDpadL == false ){ //rising edge
             LEFT_BOUNDS -= change;
         }
@@ -107,6 +187,12 @@ public class ClawTester extends OpMode {
             RIGHT_BOUNDS += change;
         }
 
+        telemetry.addData("Servo Voltage", servoSmooth.servo.getConnectionInfo());
+
+
+        telemetry.addData("SetPosition", position);
+            telemetry.addData("CloseLeft", closeLeft);
+            telemetry.addData("CloseRight", closeRight);
             telemetry.addData("Gamepad Left Bumper", gamepad1.left_bumper);
             telemetry.addData("Gamepad Right Bumper", gamepad1.right_bumper);
 
@@ -138,11 +224,11 @@ public class ClawTester extends OpMode {
         previousDpadR = gamepad1.dpad_right;
         previousDpadU = gamepad1.dpad_up;
 
-            telemetry.addLine("Servo Position" + servo.getPosition());
-            telemetry.addData("Change: ", change);
-            telemetry.addLine("Time: " + timer.updateTime());
+        telemetry.addLine("Servo Position" + servoSmooth.getPosition());
+        telemetry.addData("Change: ", change);
+        telemetry.addLine("Time: " + ServoTimer.updateTime());
 
 
-            telemetry.update();
-        }
+        telemetry.update();
+    }
 }
