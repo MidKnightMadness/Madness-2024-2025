@@ -107,6 +107,9 @@ public class OdometryLinear {
     public double getTime(){
         return currentTime - previousTime;
     }
+    public double getUpdateRate(){
+        return (1 / (currentTime - previousTime));
+    }
 
     public double getYCoordinate(){
         return position[1];

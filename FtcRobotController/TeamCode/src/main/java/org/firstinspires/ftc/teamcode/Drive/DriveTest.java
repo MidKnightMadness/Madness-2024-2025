@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 @TeleOp
 public class DriveTest extends OpMode {
     PIDBasic PIDDrive;
-    OdometryArc odometry;
+    OdometryLinear odometry;
     MecanumDrive mecanumDrive;
     public double[] targetStates = {40, 60, 20};
     Timer timer;
@@ -17,7 +17,7 @@ public class DriveTest extends OpMode {
     @Override
     public void init() {
         timer = new Timer();
-        odometry = new OdometryArc(hardwareMap, telemetry, new double[]{0,0, Math.PI/2});
+        odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0, Math.PI/2});
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         telemetry.update();
 

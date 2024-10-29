@@ -32,4 +32,12 @@ public class Timer {
         return currentTime;
     }
 
+    public void restart(){
+        elapsedTime = new ElapsedTime();
+        previousTime = 0;
+        currentTime = 0;
+        deltaTime = 0;
+        elapsedTime.startTime();
+    }
+
 }

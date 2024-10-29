@@ -6,9 +6,7 @@ package org.firstinspires.ftc.teamcode.ColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
@@ -25,13 +23,17 @@ public class ColorSensorTest extends OpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, bufferSize);
 
+
     }
 
+    SampleColors.Colors detected = SampleColors.Colors.NONE;
     @Override
     public void loop() {
         colorSensorWrapper.update();
         RGBColor rgbColor = colorSensorWrapper.getValue();
 
+
+        telemetry.addData("Detected Color", detected);
         telemetry.addData("RGB Values", rgbColor.toString());
         telemetry.addData("Time", timer.updateTime());
         

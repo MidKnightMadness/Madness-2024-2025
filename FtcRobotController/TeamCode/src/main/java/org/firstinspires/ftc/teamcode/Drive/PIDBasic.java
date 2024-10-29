@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Drive;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class PIDBasic {
-    OdometryArc odometryArc;
+    OdometryLinear odometry;
     private Telemetry telemetry;
     double[] P = new double[]{0, 0, 0};
     double[] I = new double[]{0, 0, 0};
@@ -23,10 +23,10 @@ public class PIDBasic {
     double maxIntegralSum = 0.5;
 
 
-    public PIDBasic(OdometryArc odometryArc, double targetX, double targetY, double targetAngle, Telemetry telemetry){
-        this.odometryArc = odometryArc;
+    public PIDBasic(OdometryLinear odometryLinear, double targetX, double targetY, double targetAngle, Telemetry telemetry){
+        this.odometry = odometryLinear;
 
-        initialDistanceToTarget = Math.sqrt(Math.pow(targetX - odometryArc.getXCoordinate(),2) + Math.pow(targetY-odometryArc.getYCoordinate(), 2));
+        initialDistanceToTarget = Math.sqrt(Math.pow(targetX - odometryLinear.getXCoordinate(),2) + Math.pow(targetY-odometryLinear.getYCoordinate(), 2));
         targetStates[0] = targetX;
         targetStates[1] = targetY;
         targetStates[2] = targetAngle;
@@ -44,20 +44,20 @@ public class PIDBasic {
     double[] totalGains = new double[3];
     double integralBuildupConstantLeneincy = 0.01;
     public double[] updatePID(){
-        odometryArc.update();
+        odometry.update();
 
-        distancetoTarget = Math.sqrt(Math.pow(targetStates[0] - odometryArc.getXCoordinate(),2)
-                + Math.pow(targetStates[1]-odometryArc.getYCoordinate(), 2));
+        distancetoTarget = Math.sqrt(Math.pow(targetStates[0] - odometry.getXCoordinate(),2)
+                + Math.pow(targetStates[1]-odometry.getYCoordinate(), 2));
 
-        telemetry.addData("Update Rate", 1/odometryArc.getUpdateRate());
+        telemetry.addData("Update Rate", odometry.getUpdateRate());
 
-        telemetry.addData("Left Enc", odometryArc.leftEncoder.getCurrentPosition());
-        telemetry.addData("Right Enc", odometryArc.rightEncoder.getCurrentPosition());
-        telemetry.addData("Front Enc", odometryArc.frontEncoder.getCurrentPosition());
+        telemetry.addData("Left Enc", odometry.leftEncoder.getCurrentPosition());
+        telemetry.addData("Right Enc", odometry.rightEncoder.getCurrentPosition());
+        telemetry.addData("Front Enc", odometry.frontEncoder.getCurrentPosition());
 
-        telemetry.addData("Robot X", odometryArc.getXCoordinate());
-        telemetry.addData("Robot Y", odometryArc.getYCoordinate());
-        telemetry.addData("Robot Theta", odometryArc.getRotationDegrees());
+        telemetry.addData("Robot X", odometry.getXCoordinate());
+        telemetry.addData("Robot Y", odometry.getYCoordinate());
+        telemetry.addData("Robot Theta", odometry.getRotationDegrees());
 
         telemetry.addData("Target X", targetStates[0]);
         telemetry.addData("Target Y", targetStates[1]);
@@ -80,16 +80,16 @@ public class PIDBasic {
         telemetry.addData("DTheta", DGains[2]);
 
         //Calculate P Gains
-        PGains[0] = (targetStates[0] - odometryArc.getXCoordinate()) * P[0];
-        PGains[1] = (targetStates[1] - odometryArc.getYCoordinate()) * P[1];
-        PGains[2] = - P[2] * ((targetStates[2] - odometryArc.getRotationRadians()) % (2.0 * Math.PI));
+        PGains[0] = (targetStates[0] - odometry.getXCoordinate()) * P[0];
+        PGains[1] = (targetStates[1] - odometry.getYCoordinate()) * P[1];
+        PGains[2] = - P[2] * ((targetStates[2] - odometry.getRotationRadians()) % (2.0 * Math.PI));
 
-        errorTotal[0] += ((targetStates[0] - odometryArc.getXCoordinate()) * odometryArc.getUpdateRate());
-        errorTotal[1] += ((targetStates[1] - odometryArc.getYCoordinate()) * odometryArc.getUpdateRate());
-        errorTotal[2] += ((targetStates[2] - odometryArc.getRotationRadians()) * odometryArc.getUpdateRate());
+        errorTotal[0] += ((targetStates[0] - odometry.getXCoordinate()) * odometry.getUpdateRate());
+        errorTotal[1] += ((targetStates[1] - odometry.getYCoordinate()) * odometry.getUpdateRate());
+        errorTotal[2] += ((targetStates[2] - odometry.getRotationRadians()) * odometry.getUpdateRate());
 
-        currentErrorValues[0] = (targetStates[0] - odometryArc.getXCoordinate());
-        currentErrorValues[1] = (targetStates[1] - odometryArc.getYCoordinate());
+        currentErrorValues[0] = (targetStates[0] - odometry.getXCoordinate());
+        currentErrorValues[1] = (targetStates[1] - odometry.getYCoordinate());
 
         //Integral Decay
         for(int i = 0; i < 3; i++){
@@ -113,8 +113,8 @@ public class PIDBasic {
 
 
         //Calculate D gains
-        DGains[0] = D[0] * (odometryArc.getUpdateRate() * (targetStates[0] - odometryArc.getXCoordinate()));
-        DGains[1] = D[1] * (odometryArc.getUpdateRate() * (targetStates[1] - odometryArc.getYCoordinate()));
+        DGains[0] = D[0] * (odometry.getUpdateRate() * (targetStates[0] - odometry.getXCoordinate()));
+        DGains[1] = D[1] * (odometry.getUpdateRate() * (targetStates[1] - odometry.getYCoordinate()));
 //        DGains[2] = D[2] * (odometryArc.getUpdateRate() * (targetStates[2] - odometryArc.getRotationRadians()));
 
 
