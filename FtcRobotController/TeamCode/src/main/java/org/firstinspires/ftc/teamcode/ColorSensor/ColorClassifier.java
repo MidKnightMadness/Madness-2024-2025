@@ -16,13 +16,13 @@ public class ColorClassifier {
     }
 
     public static SampleColors.Colors classify(RGBColor rgbColor){
-        if(rgbColor.getR() > 0.5 && rgbColor.getB() < 0.6){
+        if(rgbColor.getR() > 0.6 && rgbColor.getG() < 0.65){ //4 inch range
             return(SampleColors.Colors.RED);
         }
-        else if(rgbColor.getB()>0.77 && rgbColor.getG() < 0.5){
+        else if(rgbColor.getB()>0.5 && rgbColor.getR() < 0.45){ //2.5 inch range
             return(SampleColors.Colors.BLUE);
         }
-        else if(rgbColor.getR() < 0.6 && rgbColor.getG() > 0.65){
+        else if(rgbColor.getG() > 0.65){ //default is yellow
             return(SampleColors.Colors.YELLOW);
         }
         else{
