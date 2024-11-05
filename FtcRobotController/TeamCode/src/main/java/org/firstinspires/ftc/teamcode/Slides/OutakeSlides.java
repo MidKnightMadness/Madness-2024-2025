@@ -154,5 +154,14 @@ public class OutakeSlides {
         }
     }
 
+    public void horizontalSlidesControl(double xLStick){
+        if (xLStick > 0){
+            //slides.setDirection(Servo.Direction.FORWARD);
+        }
+        else if (xLStick < 0){
+            //slides.setDirection(Servo.Direction.REVERSE);
+        }
+    }
+
 }
 
