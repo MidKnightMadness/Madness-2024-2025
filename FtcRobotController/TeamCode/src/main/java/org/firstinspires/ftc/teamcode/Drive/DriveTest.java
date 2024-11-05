@@ -29,12 +29,12 @@ public class DriveTest extends OpMode {
     public void loop() {
         odometry.update();
 
-
-        //POINT to POINT PID
-        PIDDrive = new PIDBasic(odometry, targetStates[0], targetStates[1], targetStates[2], telemetry);
-        pidOutputs = PIDDrive.updatePID();
-        mecanumDrive.FieldOrientedDrive(pidOutputs[0], pidOutputs[1], pidOutputs[2], drivePower);
-        telemetry.addLine("Point to Point PID");
+//
+//        //POINT to POINT PID
+//        PIDDrive = new PIDBasic(odometry, targetStates[0], targetStates[1], targetStates[2], telemetry);
+//        pidOutputs = PIDDrive.updatePID();
+//        mecanumDrive.FieldOrientedDrive(pidOutputs[0], pidOutputs[1], pidOutputs[2], drivePower);
+//        telemetry.addLine("Point to Point PID");
 
         //Driver Field Oriented
         if(gamepad1.left_bumper){

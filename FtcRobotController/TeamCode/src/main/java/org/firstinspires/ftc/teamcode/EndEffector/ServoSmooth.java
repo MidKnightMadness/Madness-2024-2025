@@ -19,6 +19,7 @@ public class ServoSmooth {
     double maxAcceleration = 0;
 
 
+
     public ServoSmooth(HardwareMap hardwareMap, Telemetry telemetry){
         servo = hardwareMap.get(Servo.class, "claw grabber");
         timer = new Timer();
@@ -57,6 +58,7 @@ public class ServoSmooth {
         //if it accelerates past halfway point, accelerate as much as possible in that halfway dist
 
         if(accelerationDistance > halfwayDist){
+            telemetry.addLine("True");
             //recalculate time to accelerate
             accelerationTime = Math.sqrt(halfwayDist * 2 / maxAcceleration);
 

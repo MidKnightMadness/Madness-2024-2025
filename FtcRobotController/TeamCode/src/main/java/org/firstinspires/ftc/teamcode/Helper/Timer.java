@@ -32,6 +32,7 @@ public class Timer {
         return currentTime;
     }
 
+
     public void restart(){
         elapsedTime = new ElapsedTime();
         previousTime = 0;

@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-public class OutakeSlides {
+public class VerticalSlides {
     public DcMotorEx motorRight;
     public DcMotorEx motorLeft;
     public double [] slidesMotorMultipliers = {0.75, 0.75}; // Left, right
@@ -33,11 +32,11 @@ public class OutakeSlides {
 
 
 
-    public OutakeSlides(HardwareMap hardwareMap) {
+    public VerticalSlides(HardwareMap hardwareMap) {
 
         timer = new Timer();
-        motorLeft = hardwareMap.get(DcMotorEx.class, "Left outtake motor");
-        motorRight = hardwareMap.get(DcMotorEx.class, "Right outtake motor");
+        motorLeft = hardwareMap.get(DcMotorEx.class, "Left vertical slides");
+        motorRight = hardwareMap.get(DcMotorEx.class, "Right vertical slides");
 
 
         motorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -51,7 +50,7 @@ public class OutakeSlides {
         setStartingPositions(motorLeft.getCurrentPosition(), motorRight.getCurrentPosition());
     }
 
-    public OutakeSlides(HardwareMap hardwareMap, int leftPos, int rightPose) {
+    public VerticalSlides(HardwareMap hardwareMap, int leftPos, int rightPose) {
 
         timer = new Timer();
         motorLeft = hardwareMap.get(DcMotorEx.class, "Left outtake motor");

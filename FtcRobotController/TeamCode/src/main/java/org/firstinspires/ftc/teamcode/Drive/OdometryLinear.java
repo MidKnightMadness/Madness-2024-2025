@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+//3 dead wheel localization
 
 public class OdometryLinear {
 
-    double cmPerTick = (2 * Math.PI * 3.429)/ 8192;
-    double distBetweenHori = 6.3;
-    double distVertEncoders = 3.6;
+    double cmPerTick = (2 * Math.PI * 3.429)/ 8192; //cml
+    double distBetweenHori = (6.2 + 5.5)/2;//in
+    double distVertEncoders = 0.14;//in
     HardwareMap hardwareMap;
     Telemetry telemetry;
     public DcMotor leftEncoder;

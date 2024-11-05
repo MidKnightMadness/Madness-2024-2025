@@ -69,7 +69,7 @@ public class MecanumDrive {
     double lowPassConstantPrevious = 0.1;
 
 
-    public void FieldOrientedDrive(double x, double y, double rotation, double power){
+    public void FieldOrientedDrive(double x, double y, double rotation, double angle, double power){
 
         //Keep lowPass value realtively low for teleOp to respond quicker, higher for auto for smoothness
         double lowPassX = lowPassConstantPrevious * previousX + (1-lowPassConstantPrevious) * x;
@@ -77,8 +77,8 @@ public class MecanumDrive {
 
 
         //rotate x axis to y axis -> and convert
-        double newX = lowPassX * Math.cos(rotation - Math.PI/2) + lowPassY * Math.sin(rotation - Math.PI/2);
-        double newY = -lowPassX * Math.sin(rotation - Math.PI/2) + lowPassY * Math.cos(rotation - Math.PI/2);
+        double newX = lowPassX * Math.cos(angle - Math.PI/2) + lowPassY * Math.sin(angle - Math.PI/2);
+        double newY = -lowPassX * Math.sin(angle - Math.PI/2) + lowPassY * Math.cos(angle - Math.PI/2);
 
         double FLPower = newY + newX + rotation;
         double FRPower = newY - newX - rotation;
