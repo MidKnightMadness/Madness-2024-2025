@@ -30,7 +30,7 @@ public class HorizontalSlides {
 //        horizontalLeft.setPosition(servoLeftBounds[1]);
 //        horizontalRight.setPosition(servoRightBounds[1]);
         horizontalLeft.setPosition(horizontalLeft.getPosition() + 0.1*x);
-        horizontalRight.setPosition(horzontalRight.getPosition() + 0.1*x);
+        horizontalRight.setPosition(horizontalRight.getPosition() + 0.1*x);
     }
 
 

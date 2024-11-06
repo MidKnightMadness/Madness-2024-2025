@@ -39,7 +39,7 @@ public class DriveTest extends OpMode {
         //Driver Field Oriented
         if(gamepad1.left_bumper){
             odometry.update();
-            mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
+           // mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
             telemetry.addLine("Driver Field Oriented");
         }
         //Robot oriented

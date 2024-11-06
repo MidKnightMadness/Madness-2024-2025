@@ -20,7 +20,8 @@ public class MotorDrive extends OpMode {
 
     @Override
     public void loop() {
-        FR.setPower(0.5);
+        FR.setPower(gamepad1.left_stick_x);
+
 
     }
 }
