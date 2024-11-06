@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 @Config
 @TeleOp(group= "Game", name = "Driver Controlled TeleOp")
 public class Main extends OpMode implements ServoPositions {
-    boolean gameTime = false; //player two can take over drive
+   // boolean gameTime = false; //player two can take over drive
     MecanumDrive mecanumDrive;
     OdometryLinear odometry;
     VerticalSlides verticalSlides;
@@ -32,7 +32,7 @@ public class Main extends OpMode implements ServoPositions {
     Servo armServo, clawServo;
     ColorSensor clawColorSensor;
     ColorSensorWrapper colorSensorWrapper;
-    ButtonToggle left1Bumper, right1Bumper, A2, X2, Y2;
+    ButtonToggle left1Bumper, right1Bumper, A1, B1, X1, Y1, dpadDOWN1, dpadDOWN2, dpadDOWN3, dpadDOWN4;
     IMU imu;
     boolean isUsingFieldOriented;
     Timer timer;
@@ -40,21 +40,21 @@ public class Main extends OpMode implements ServoPositions {
 
     @Override
     public void init() {
-      mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-      odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
-      verticalSlides = new VerticalSlides(hardwareMap);
-      armServo = hardwareMap.get(Servo.class, "Arm Servo");
+        mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
+        odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
+        verticalSlides = new VerticalSlides(hardwareMap);
+        armServo = hardwareMap.get(Servo.class, "Arm Servo");
 
-      clawColorSensor = hardwareMap.get(ColorSensor.class, "Claw Color Sensor");
-      colorSensorWrapper = new ColorSensorWrapper(clawColorSensor, 2);
+        clawColorSensor = hardwareMap.get(ColorSensor.class, "Claw Color Sensor");
+        colorSensorWrapper = new ColorSensorWrapper(clawColorSensor, 2);
 
-      left1Bumper = new ButtonToggle();
-      right1Bumper = new ButtonToggle();
-      timer = new Timer();
+        left1Bumper = new ButtonToggle();
+        right1Bumper = new ButtonToggle();
+        timer = new Timer();
 
-      init_IMU();
+        init_IMU();
 
-      telemetry.addLine("Initialized");
+        telemetry.addLine("Initialized");
     }
 
     double power = 0.8;
@@ -90,7 +90,7 @@ public class Main extends OpMode implements ServoPositions {
         else {
             //can use gamepad 1 left bumper to toggle field oriented drive controlled by driver one x, y movements on sticks
             mecanumDrive.FieldOrientedDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x,
-                        imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2d + rotationResetConstant, power);
+                    imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2d + rotationResetConstant, power);
         }
 
 
@@ -123,25 +123,20 @@ public class Main extends OpMode implements ServoPositions {
     boolean clawClosed;
     public void handleManipulatorControls() {
         //helpful presets
-        if(A2.update(gamepad2.a)){
+        if(A1.update(gamepad1.a)){
             armServo.setPosition(ServoPositions.armSpecimenHeight);
         }
 
-        if(X2.update(gamepad2.x)){
+        if(X1.update(gamepad1.x)){
             armServo.setPosition(ServoPositions.armOutakeHeight);
         }
 
-        if(Y2.update(gamepad2.y)){
+        if(Y1.update(gamepad1.y)){
             armServo.setPosition(ServoPositions.armSampleHeight);
         }
 
-        //slides control
-        if (gamepad2.left_stick_x != 0 || gamepad2.left_stick_y != 0) {
-            horizontalSlides.extend(gamepad2.left_stick_x);
-            verticalSlides.verticalSlidesExtend(gamepad2.left_stick_y);
-        }
 
-        if(gamepad2.right_bumper){
+        if(gamepad1.right_bumper){
             if(!clawClosed){
                 clawServo.setPosition(ServoPositions.grabClosed);
             }
@@ -151,9 +146,9 @@ public class Main extends OpMode implements ServoPositions {
         }
 
 
-        if (gamepad2.left_bumper && !gameTime) { //disable this for actual game
+        /*if (gamepad1.left_bumper && !gameTime) { //disable this for actual game
             mecanumDrive.normalDrive(power, -gamepad2.left_stick_x, gamepad2.left_stick_y, -gamepad2.right_stick_x);
-        }
+        }*/
 
     }
 

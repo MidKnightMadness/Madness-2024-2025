@@ -151,6 +151,20 @@ public class VerticalSlides {
                 motorLeft.setPower(0.0);
             }
         }
+
+    }
+
+    public void verticalSlidesExtend(double y){
+        if (y > 0 && this.currentPos < rightBounds) {
+            motorRight.setPower(y);
+            motorLeft.setPower(-y);
+        }
+        else if (y < 0 && this.currentPos > leftBounds) {
+            motorRight.setPower(y);
+            motorLeft.setPower(-y);
+        }
+
+        this.update(12);
     }
 
     public void horizontalSlidesControl(double xLStick){

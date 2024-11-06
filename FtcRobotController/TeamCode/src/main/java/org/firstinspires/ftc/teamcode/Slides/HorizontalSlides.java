@@ -26,9 +26,11 @@ public class HorizontalSlides {
         timer = new Timer();
     }
 
-    public void extend(){
-        horizontalLeft.setPosition(servoLeftBounds[1]);
-        horizontalRight.setPosition(servoRightBounds[1]);
+    public void extend(double x){
+//        horizontalLeft.setPosition(servoLeftBounds[1]);
+//        horizontalRight.setPosition(servoRightBounds[1]);
+        horizontalLeft.setPosition(horizontalLeft.getPosition() + 0.1*x);
+        horizontalRight.setPosition(horzontalRight.getPosition() + 0.1*x);
     }
 
 
