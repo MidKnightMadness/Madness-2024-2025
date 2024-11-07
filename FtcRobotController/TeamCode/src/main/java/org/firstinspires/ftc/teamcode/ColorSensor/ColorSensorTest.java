@@ -22,16 +22,14 @@ public class ColorSensorTest extends OpMode {
 
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, bufferSize);
-
-
     }
 
-    SampleColors.Colors detected = SampleColors.Colors.NONE;
     @Override
     public void loop() {
         colorSensorWrapper.update();
         RGBColor rgbColor = colorSensorWrapper.getValue();
 
+        SampleColors.Colors detected = ColorClassifier.classify(rgbColor);
 
         telemetry.addData("Detected Color", detected);
         telemetry.addData("RGB Values", rgbColor.toString());
