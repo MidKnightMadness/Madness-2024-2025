@@ -37,6 +37,9 @@ public class Main extends OpMode implements ServoPositions {
     boolean isUsingFieldOriented;
     Timer timer;
 
+    double armSpecimenHeight = 0;
+    double armOuttakeHeight = 0;
+    double armSampleHeight = 0;
 
     @Override
     public void init() {
@@ -92,10 +95,6 @@ public class Main extends OpMode implements ServoPositions {
             mecanumDrive.FieldOrientedDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x,
                         imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2d + rotationResetConstant, power);
         }
-
-
-
-
         //reset imu at 90 degrees angle(facing backstage) when a is clicked
         if (gamepad1.a) { // Temporary for field oriented drive, may come up with auto align functionality
             imu.resetYaw();
@@ -124,15 +123,18 @@ public class Main extends OpMode implements ServoPositions {
     public void handleManipulatorControls() {
         //helpful presets
         if(A2.update(gamepad2.a)){
-            armServo.setPosition(ServoPositions.armSpecimenHeight);
+//            armServo.setPosition(ServoPositions.armSpecimenHeight);
+            verticalSlides.extendToDistance(armSpecimenHeight);
         }
 
         if(X2.update(gamepad2.x)){
-            armServo.setPosition(ServoPositions.armOutakeHeight);
+//            armServo.setPosition(ServoPositions.armOutakeHeight);
+            verticalSlides.extendToDistance(armOuttakeHeight);
         }
 
         if(Y2.update(gamepad2.y)){
-            armServo.setPosition(ServoPositions.armSampleHeight);
+//            armServo.setPosition(ServoPositions.armSampleHeight);
+            verticalSlides.extendToDistance(armSampleHeight);
         }
 
         //slides control
