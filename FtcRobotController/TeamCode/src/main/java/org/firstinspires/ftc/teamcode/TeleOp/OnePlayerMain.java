@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 @Config
 @TeleOp(group= "Game", name = "Driver Controlled TeleOp")
-public class Main extends OpMode implements ServoPositions {
+public class OnePlayerMain extends OpMode implements ServoPositions {
    // boolean gameTime = false; //player two can take over drive
     MecanumDrive mecanumDrive;
     OdometryLinear odometry;

@@ -1,14 +1,7 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-
-public class coordinate {
+public class Coordinate {
 
     double xCord, yCord, angle;
 

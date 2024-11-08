@@ -16,8 +16,8 @@ public class VerticalSlides {
 
     double [] mainExtensionConstants = {0.1, 0.1}; // For both sides to follow based on distance to target; left, right
     double correctionConstant = 0.0; // Left slide follows right side, to help witn synchronization
-    int [] leftBounds = {0, -2629}; //arbitrary; check
-    int [] rightBounds = {0, 2974}; //arbitrary; check
+    double [] leftBounds = {0, -2629}; //arbitrary; check
+    double [] rightBounds = {0, 2974}; //arbitrary; check
     int [] startingPositions = {0, 0}; // Left, right
     double inPerTickLeftSlide = -21.5 / 2629d; //arbitrary; check
     double inPerTickRightSlide = 21.5 / 2974d; //arbitrary; check
@@ -155,11 +155,11 @@ public class VerticalSlides {
     }
 
     public void verticalSlidesExtend(double y){
-        if (y > 0 && this.currentPos < rightBounds) {
+        if (y > 0 && this.currentPos < rightBounds[1]) {
             motorRight.setPower(y);
             motorLeft.setPower(-y);
         }
-        else if (y < 0 && this.currentPos > leftBounds) {
+        else if (y < 0 && this.currentPos > leftBounds[1]) {
             motorRight.setPower(y);
             motorLeft.setPower(-y);
         }

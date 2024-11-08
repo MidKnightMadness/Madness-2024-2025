@@ -24,9 +24,9 @@ public class ClawWithArm extends OpMode {
 
     ColorSensorWrapper colorSensorWrapper;
     Timer timer;
-//    public static double grabOpen = 0.4;
-//    public static double grabClosed = 0.635;
-//    public static double grabNeutral = 0.4;
+    public static double grabOpen = 0.4;
+    public static double grabClosed = 0.635;
+    public static double grabNeutral = 0.4;
 
     //need fixing
     SampleColors.Colors detected = SampleColors.Colors.NONE;
@@ -38,7 +38,7 @@ public class ClawWithArm extends OpMode {
     public void init() {
         LeftBumper = new ButtonToggle();
         rightBumper = new ButtonToggle();
-//        grabServo = hardwareMap.get(Servo.class, "grab servo");
+        grabServo = hardwareMap.get(Servo.class, "claw grabber");
         armServoLeft = hardwareMap.get(Servo.class, "arm servo left");
         armServoRight = hardwareMap.get(Servo.class, "arm servo right");
 
@@ -46,7 +46,7 @@ public class ClawWithArm extends OpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, 2);
 
-       //grabServo.setPosition(grabNeutral);
+       grabServo.setPosition(grabNeutral);
        // armServoLeft.setPosition(armRightNeutral);
         armServoLeft.setPosition(LEFTBounds[0]);
         armServoRight.setPosition(RIGHTBounds[0]);
@@ -108,6 +108,13 @@ public class ClawWithArm extends OpMode {
         if(gamepad1.right_bumper){
             armServoLeft.setPosition(0.7);
             armServoRight.setPosition(0.25);
+        }
+        if(gamepad1.left_trigger > 0){
+            grabServo.setPosition(grabOpen);
+        }
+
+        if(gamepad1.right_trigger > 0){
+            grabServo.setPosition(grabClosed);
         }
 
         //ARM SERVO LEFT OPEN CLOSE
