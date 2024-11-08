@@ -13,9 +13,9 @@ public class MecanumDrive {
     public DcMotorEx BR;
 
     //RPM Constants
-    double FLmulti = 1;
-    double FRmulti = 1;
-    double BLmulti = 1;
+    double FLmulti = 1 * (296/393);
+    double FRmulti = 1 * (296/318);
+    double BLmulti = 1 * (296/314);
     double BRmulti = 1;
     
     
