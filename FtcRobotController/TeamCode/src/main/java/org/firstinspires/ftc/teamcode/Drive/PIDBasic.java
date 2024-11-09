@@ -5,12 +5,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class PIDBasic {
     OdometryLinear odometry;
     private Telemetry telemetry;
+    //Madness Chassis Into the Deep
     double[] P = new double[]{0, 0, 0};
     double[] I = new double[]{0, 0, 0};
     double[] D = new double[]{0, 0, 0};
     double[] Kv = new double[]{0, 0, 0};
     double[] Ka = new double[]{0, 0, 0};
 
+    //Madness Chassis 2 Years Ago[Test Robot]
     double[] targetStates = new double[3];
     double distancetoTarget;
     double initialDistanceToTarget;

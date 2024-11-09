@@ -25,7 +25,7 @@ public class ClawWithArm extends OpMode {
     ColorSensorWrapper colorSensorWrapper;
     Timer timer;
     public static double grabOpen = 0.4;
-    public static double grabClosed = 0.635;
+    public static double grabClosed = 0.9;
     public static double grabNeutral = 0.4;
 
     //need fixing
@@ -85,17 +85,17 @@ public class ClawWithArm extends OpMode {
         telemetry.update();
 
         if(gamepad1.dpad_left && previousDpadL == false ){ //rising edge
-            RIGHTBounds[0] -= change;
+            grabOpen -= change;
         }
         if(gamepad1.dpad_up && previousDpadU == false){
-            RIGHTBounds[0] += change;
+            grabOpen += change;
         }
         if(gamepad1.dpad_down && previousDpadD == false){
-            RIGHTBounds[1] -= change;
+            grabClosed -= change;
         }
 
         if(gamepad1.dpad_right && previousDpadR == false){
-            RIGHTBounds[1] += change;
+            grabClosed += change;
         }
         //0.7 -> 0.3 left
         //0.25 -> 0.65 right

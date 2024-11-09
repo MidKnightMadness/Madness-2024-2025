@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class OdometryLinear {
 
-    double cmPerTick = (2 * Math.PI * 3.429)/ 8192; //cml
-    double distBetweenHori = (6.2 + 5.5)/2;//in
+    double cmPerTick = (2 * Math.PI * 3.429)/ 8192; //
+    double distBetweenHori = 12.2 ;//in
     double distVertEncoders = 0.14;//in
     HardwareMap hardwareMap;
     Telemetry telemetry;
@@ -28,9 +28,15 @@ public class OdometryLinear {
 
         this.position = starting;//x, y, theta
 
-        leftEncoder = hardwareMap.get(DcMotor.class, "FL");
-        rightEncoder = hardwareMap.get(DcMotor.class, "FR");
-        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
+        //actual robot
+//        leftEncoder = hardwareMap.get(DcMotor.class, "FL");
+//        rightEncoder = hardwareMap.get(DcMotor.class, "FR");
+//        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
+
+        //test robot
+        leftEncoder = hardwareMap.get(DcMotor.class, "BL");
+        rightEncoder = hardwareMap.get(DcMotor.class, "FL");
+        frontEncoder = hardwareMap.get(DcMotor.class, "FR");
 
         elapsedTime = new ElapsedTime();
         elapsedTime.startTime();
@@ -50,10 +56,11 @@ public class OdometryLinear {
         double rightEncoderDist = rightEncoder.getCurrentPosition() - previousEncoderVals[1];
         double frontEncoderDist = frontEncoder.getCurrentPosition() - previousEncoderVals[2];
 
-        double differenceOverHor = (leftEncoderDist- rightEncoderDist)/ distBetweenHori;
+        double differenceOverHor = (leftEncoderDist - rightEncoderDist)/ distBetweenHori;
 
         double deltaRobotX = cmPerTick * (leftEncoderDist + rightEncoderDist)/2;
         deltaTheta = cmPerTick * differenceOverHor;
+
         double deltaRobotY = cmPerTick * (frontEncoderDist - distVertEncoders *  differenceOverHor);
 
         //change to field coordinates

@@ -13,7 +13,6 @@ public class OdometryTest extends OpMode{
 
     MecanumDrive mecanumDrive;
     OdometryLinear linearOdo;
-    OdometryArc arcOdo;
 
 
 
@@ -21,7 +20,6 @@ public class OdometryTest extends OpMode{
     public void init() {
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
 
-         arcOdo = new OdometryArc(hardwareMap, telemetry, new double[]{0,0});
          linearOdo = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0});
 
 
@@ -31,16 +29,12 @@ public class OdometryTest extends OpMode{
     @Override
     public void loop() {
 
-        arcOdo.update();
         linearOdo.update();
 
-        arcOdo.telemetry();
 
         telemetry.addLine("----------------------------------");
 
         linearOdo.telemtry();
-
-
 
        // mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, power);
     }

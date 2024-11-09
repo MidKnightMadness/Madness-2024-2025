@@ -21,7 +21,7 @@ public class MecanumDrive {
     
     Telemetry telemetry;
     private double[] motorInputs;
-    private double[] motorFinalInputs;
+    private double[] motorFinalInputs = new double[4];
     double previousX = 0.0;
     double previousY = 0.0;
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){

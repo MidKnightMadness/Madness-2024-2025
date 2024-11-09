@@ -1,22 +1,30 @@
-package org.firstinspires.ftc.teamcode.Drive;
-
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
+import org.firstinspires.ftc.teamcode.Drive.PIDBasic;
+import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp(name = "IMU")
-public class IMUTest extends OpMode {
-
+@TeleOp()
+public class AutoDrive extends OpMode {
+    Timer timer;
+    MecanumDrive mecanumDrive;
+    OdometryLinear odometryLinear;
+    PIDBasic pid;
     IMU imu;
 
+    double[] pidPoints = new double[]{};
+    double[] startingPosition = new double[]{7.5, 7.5, Math.PI / 2};
     @Override
     public void init() {
+        timer = new Timer();
+        mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
+        odometryLinear = new OdometryLinear(hardwareMap, telemetry, startingPosition);
         RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
         RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
 
@@ -26,13 +34,12 @@ public class IMUTest extends OpMode {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         imu.resetYaw();
+
     }
 
     @Override
     public void loop() {
-        double Theta = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).thirdAngle;
 
 
-        telemetry.addData("Theta", Theta);
     }
 }
