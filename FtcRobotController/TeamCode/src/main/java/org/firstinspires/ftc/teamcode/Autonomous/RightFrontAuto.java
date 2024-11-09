@@ -1,4 +1,4 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-public class RightFrontAuto extends AutoDefault{
+public class RightFrontAuto{
 }
