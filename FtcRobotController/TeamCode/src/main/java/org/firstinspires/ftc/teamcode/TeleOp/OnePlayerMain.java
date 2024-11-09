@@ -111,8 +111,8 @@ public class OnePlayerMain extends OpMode implements ServoPositions {
     @Override
     public void start() {
         clawServo.setPosition(ServoPositions.grabNeutral);
-        armServoLeft.setPosition(ServoPositions.armServoLeftOpen);
-        armServoRight.setPosition(ServoPositions.armServoRightOpen);
+//        armServoLeft.setPosition(ServoPositions.armServoLeftOpen);
+//        armServoRight.setPosition(ServoPositions.armServoRightOpen);
         //set vertical slides to neutral position
         //set horizontal Slides to neutral position
 

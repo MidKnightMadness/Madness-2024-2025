@@ -64,8 +64,8 @@ public class DriveTest extends OpMode {
         }
         if(gamepad1.left_bumper){
 //            odometry.update();
-            mecanumDrive.veloictyTest(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
-            telemetry.addLine("Velocity set");
+//            mecanumDrive.veloictyTest(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
+//            telemetry.addLine("Velocity set");
 
             telemetry.addData("Gampead 1 Left stick x", gamepad1.left_stick_x);
             telemetry.addData("Gamepad 1 Left stick y", gamepad1.left_stick_y);
@@ -76,7 +76,10 @@ public class DriveTest extends OpMode {
             telemetry.addData("FL Velocity", mecanumDrive.FL.getVelocity());
             telemetry.addData("BR Velocity", mecanumDrive.BR.getVelocity());
             telemetry.addData("BL Velocity", mecanumDrive.BL.getVelocity());
-        //    mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
+            double rotation = ((imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - 180) % 360 + 180) + Math.PI / 2d;
+            telemetry.addData("Rotation", rotation);
+
+           mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, rotation, drivePower);
         }
         //Robot oriented
         else{
