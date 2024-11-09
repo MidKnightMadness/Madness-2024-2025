@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
-public class OdoDrive {
+public class DeadReckoningDrive {
     DcMotor fr;
     DcMotor fl;
     DcMotor bl;
@@ -17,8 +17,13 @@ public class OdoDrive {
     DcMotor frontOdo;
     IMU imu;
 
+    double cmPerTick = (2 * Math.PI * 3.429)/ 8192; //
+    double distBetweenHori = 12.2 ;//in
+    double distVertEncoders = 0.14;//in
+    double horizontalTraveled;
+    double verticalTraveled;
 
-    public OdoDrive(HardwareMap hardwareMap){
+    public DeadReckoningDrive(HardwareMap hardwareMap){
         //initialize motors
         fl = hardwareMap.get(DcMotorEx.class, "FL");
         fr = hardwareMap.get(DcMotorEx.class, "FR");
@@ -54,6 +59,28 @@ public class OdoDrive {
         imu.resetYaw();
     }
 
+    public void updatePosition(){
+        horizontalTraveled = frontOdo.getCurrentPosition();
+        verticalTraveled = (rightOdo.getCurrentPosition() - leftOdo.getCurrentPosition()) / 2;
+    }
 
+    //don't need theta
+    public void resetPosition(){
+        horizontalTraveled = 0;
+        verticalTraveled = 0;
+    }
 
+    public void driveForward(double targetPos){
+
+    }
+
+    public void resetEncoders(){
+        leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftOdo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontOdo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 }

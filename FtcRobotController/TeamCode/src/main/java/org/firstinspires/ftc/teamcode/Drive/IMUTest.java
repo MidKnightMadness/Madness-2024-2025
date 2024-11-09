@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -33,6 +34,9 @@ public class IMUTest extends OpMode {
         double Theta = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).thirdAngle;
 
 
+        imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
         telemetry.addData("Theta", Theta);
+        telemetry.update();
     }
 }
