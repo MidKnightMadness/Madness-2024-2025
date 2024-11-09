@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp(name = "Color Sensor")
+//@TeleOp(name = "Color Sensor")
 public class ColorSensorTest extends OpMode {
     ColorSensor colorSensor;
     ColorSensorWrapper colorSensorWrapper;

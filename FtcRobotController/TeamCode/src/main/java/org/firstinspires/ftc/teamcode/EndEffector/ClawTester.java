@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.EndEffector;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -24,8 +21,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-@TeleOp(name = "Claw")
-@Config
+//@TeleOp(name = "Claw")
+
 public class ClawTester extends OpMode {
     ServoSmooth servoSmooth;
     Timer timer;
@@ -42,8 +39,8 @@ public class ClawTester extends OpMode {
     double wristNeutral = 0;//change this val
     //double MARGIN_OF_ERROR = 0.05; //arbitrary
 
-    FtcDashboard dashboard;
-    TelemetryPacket packet;
+//    FtcDashboard dashboard;
+//    TelemetryPacket packet;
     
 
     ColorSensor colorSensor;
@@ -70,8 +67,8 @@ public class ClawTester extends OpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, bufferSize);
 
-        packet = new TelemetryPacket();
-        dashboard = FtcDashboard.getInstance();
+//        packet = new TelemetryPacket();
+//        dashboard = FtcDashboard.getInstance();
         
     }
 
@@ -167,11 +164,11 @@ public class ClawTester extends OpMode {
 
                 ServoTimer.updateTime();
                 double deltaTime = ServoTimer.getDeltaTime();
-                packet.put("Delta Time", deltaTime);
-                packet.put("Servo Position", servoSmooth.getPosition() - previousPosition);
-                packet.put("Servo Velocity", (servoSmooth.getPosition() - previousPosition)/ deltaTime);
-                packet.put("Servo Acceleration", ((servoSmooth.getPosition() - previousPosition) / deltaTime) / deltaTime);
-                dashboard.sendTelemetryPacket(packet);
+//                packet.put("Delta Time", deltaTime);
+//                packet.put("Servo Position", servoSmooth.getPosition() - previousPosition);
+//                packet.put("Servo Velocity", (servoSmooth.getPosition() - previousPosition)/ deltaTime);
+//                packet.put("Servo Acceleration", ((servoSmooth.getPosition() - previousPosition) / deltaTime) / deltaTime);
+//                dashboard.sendTelemetryPacket(packet);
             }
                 closeRight = false;
 
@@ -219,11 +216,11 @@ public class ClawTester extends OpMode {
 
         ServoTimer.updateTime();
         double deltaTime = ServoTimer.getDeltaTime();
-        packet.put("Delta Time", deltaTime);
-        packet.put("Servo Position", servoSmooth.getPosition() - previousPosition);
-        packet.put("Servo Velocity", (servoSmooth.getPosition() - previousPosition)/ deltaTime);
-        packet.put("Servo Acceleration", ((servoSmooth.getPosition() - previousPosition) / deltaTime) / deltaTime);
-        dashboard.sendTelemetryPacket(packet);
+//        packet.put("Delta Time", deltaTime);
+//        packet.put("Servo Position", servoSmooth.getPosition() - previousPosition);
+//        packet.put("Servo Velocity", (servoSmooth.getPosition() - previousPosition)/ deltaTime);
+//        packet.put("Servo Acceleration", ((servoSmooth.getPosition() - previousPosition) / deltaTime) / deltaTime);
+//        dashboard.sendTelemetryPacket(packet);
 //        servo.setPosition(targetPos);
 //
 

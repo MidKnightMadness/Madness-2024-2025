@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
 
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
-@Config
-@TeleOp
+//@Config
+//@TeleOp
 public class PIDTuner extends OpMode {
     double Px = 0.0;
     double Py = 0.0;

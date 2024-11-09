@@ -7,8 +7,8 @@ public interface ServoPositions {
 
     //need fixing
     double armServoLeftSample = 0.3;
-    double armServoLeftSpecimen = 0.65;
-    double armServoRightSample = 0.7;
+    double armServoLeftSpecimen = 0.7;
+    double armServoRightSample = 0.65;
     double armServoRightSpecimen = 0.25;
 
 

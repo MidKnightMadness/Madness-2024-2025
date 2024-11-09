@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 
-@TeleOp(name = "motor test")
+//@TeleOp(name = "motor test")
 public class MotorDrive extends OpMode {
 
     public DcMotor FR;

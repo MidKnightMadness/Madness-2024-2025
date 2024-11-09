@@ -51,9 +51,8 @@ public class MecanumDrive {
 
         motorInputs = new double[4];
     }
-    double maxVelocity = 800;
 
-    public void veloictyTest(double x, double y, double rotation, double power){
+    public void velocityDrive(double x, double y, double rotation, double maxVelocity){
         double FLPower = y + x + rotation;
         double FRPower = y - x - rotation;
         double BLPower = y - x + rotation;
@@ -141,7 +140,7 @@ public class MecanumDrive {
         telemetry.addData("BL",  motorFinalInputs[2]);
         telemetry.addData("BR",  motorFinalInputs[3]);
     }
-    private void setPowers(double FLP, double FRP, double BLP, double BRP, double power) {
+    public void setPowers(double FLP, double FRP, double BLP, double BRP, double power) {
 
         motorFinalInputs[0] = FLP * power;
         motorFinalInputs[1] = FRP * power;

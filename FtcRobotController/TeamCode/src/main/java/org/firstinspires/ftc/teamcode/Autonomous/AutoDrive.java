@@ -1,30 +1,37 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
 import org.firstinspires.ftc.teamcode.Drive.PIDBasic;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp()
+@Autonomous
 public class AutoDrive extends OpMode {
     Timer timer;
     MecanumDrive mecanumDrive;
-    OdometryLinear odometryLinear;
-    PIDBasic pid;
+//    OdometryLinear odometryLinear;
+//    PIDBasic pid;
     IMU imu;
 
-    double[] pidPoints = new double[]{};
-    double[] startingPosition = new double[]{7.5, 7.5, Math.PI / 2};
+
+    DeadReckoningDrive deadReckoningDrive;
+//    double[] pidPoints = new double[]{};
+//    double[] startingPosition = new double[]{7.5, 7.5, Math.PI / 2};
     @Override
     public void init() {
         timer = new Timer();
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        odometryLinear = new OdometryLinear(hardwareMap, telemetry, startingPosition);
+//        odometryLinear = new OdometryLinear(hardwareMap, telemetry, startingPosition);
+        deadReckoningDrive = new DeadReckoningDrive(hardwareMap, telemetry);
+
         RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
         RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
 
@@ -37,9 +44,23 @@ public class AutoDrive extends OpMode {
 
     }
 
+    public void sleep(long time) throws InterruptedException {
+        Thread.sleep(time);
+    }
+    double timeForward = 1.5;
+    double timeBack = 1.5;
+    double timeRight = 4.5;
+
+    public void park() {
+
+    }
+
+    @Override
+    public void start() {
+        park();
+    }
+
     @Override
     public void loop() {
-
-
     }
 }

@@ -12,8 +12,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class OdometryLinear {
 
     double cmPerTick = (2 * Math.PI * 3.429)/ 8192; //
-    double distBetweenHori = 12.2 ;//in
+    double distBetweenHori = 11.024 ;//in
     double distVertEncoders = 0.14;//in
+
     HardwareMap hardwareMap;
     Telemetry telemetry;
     public DcMotor leftEncoder;
@@ -34,9 +35,9 @@ public class OdometryLinear {
 //        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
 
         //test robot
-        leftEncoder = hardwareMap.get(DcMotor.class, "BL");
-        rightEncoder = hardwareMap.get(DcMotor.class, "FL");
-        frontEncoder = hardwareMap.get(DcMotor.class, "FR");
+        leftEncoder = hardwareMap.get(DcMotor.class, "leftEncoder");
+        rightEncoder = hardwareMap.get(DcMotor.class, "rightEncoder");
+        frontEncoder = hardwareMap.get(DcMotor.class, "centerEncoder");
 
         elapsedTime = new ElapsedTime();
         elapsedTime.startTime();

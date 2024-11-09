@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.EndEffector;
-
-import com.acmerobotics.dashboard.config.Config;
+//
+//import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-
-@Config
-@TeleOp(name = "ClawWithArm")
+//
+//@Config
+//@TeleOp(name = "ClawWithArm")
 public class ClawWithArm extends OpMode {
     Servo grabServo;
     Servo armServoLeft;
