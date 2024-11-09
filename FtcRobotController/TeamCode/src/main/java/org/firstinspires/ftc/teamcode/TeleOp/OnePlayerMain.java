@@ -29,7 +29,7 @@ public class OnePlayerMain extends OpMode implements ServoPositions {
     OdometryLinear odometry;
     VerticalSlides verticalSlides;
     HorizontalSlides horizontalSlides;
-    Servo armServo, clawServo;
+    Servo armServoLeft, armServoRight, clawServo;
     ColorSensor clawColorSensor;
     ColorSensorWrapper colorSensorWrapper;
     ButtonToggle left1Bumper, right1Bumper, A1, B1, X1, Y1, dpadDOWN1, dpadDOWN2, dpadDOWN3, dpadDOWN4;
@@ -41,9 +41,11 @@ public class OnePlayerMain extends OpMode implements ServoPositions {
     @Override
     public void init() {
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
+//        odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
         verticalSlides = new VerticalSlides(hardwareMap);
-        armServo = hardwareMap.get(Servo.class, "Arm Servo");
+        armServoLeft = hardwareMap.get(Servo.class, "Arm Servo Left");
+        armServoRight = hardwareMap.get(Servo.class, "Arm Servo Right");
+        clawServo = hardwareMap.get(Servo.class, "Claw Grabber");
 
         clawColorSensor = hardwareMap.get(ColorSensor.class, "Claw Color Sensor");
         colorSensorWrapper = new ColorSensorWrapper(clawColorSensor, 2);
@@ -109,7 +111,8 @@ public class OnePlayerMain extends OpMode implements ServoPositions {
     @Override
     public void start() {
         clawServo.setPosition(ServoPositions.grabNeutral);
-        armServo.setPosition(ServoPositions.armNeutralHeight);
+        armServoLeft.setPosition(ServoPositions.armServoLeftOpen);
+        armServoRight.setPosition(ServoPositions.armServoRightOpen);
         //set vertical slides to neutral position
         //set horizontal Slides to neutral position
 
@@ -124,15 +127,15 @@ public class OnePlayerMain extends OpMode implements ServoPositions {
     public void handleManipulatorControls() {
         //helpful presets
         if(A1.update(gamepad1.a)){
-            armServo.setPosition(ServoPositions.armSpecimenHeight);
+           // armServoLeft
         }
 
         if(X1.update(gamepad1.x)){
-            armServo.setPosition(ServoPositions.armOutakeHeight);
+           // armServo.setPosition(ServoPositions.armOutakeHeight);
         }
 
         if(Y1.update(gamepad1.y)){
-            armServo.setPosition(ServoPositions.armSampleHeight);
+          //  armServo.setPosition(ServoPositions.armSampleHeight);
         }
 
 

@@ -25,7 +25,7 @@ public class ClawWithArm extends OpMode {
     ColorSensorWrapper colorSensorWrapper;
     Timer timer;
     public static double grabOpen = 0.4;
-    public static double grabClosed = 0.9;
+    public static double grabClosed = 0.8;
     public static double grabNeutral = 0.4;
 
     //need fixing

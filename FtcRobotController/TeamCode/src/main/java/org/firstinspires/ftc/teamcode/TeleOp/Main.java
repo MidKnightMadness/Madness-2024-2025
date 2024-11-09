@@ -11,11 +11,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.ColorSensor.ColorClassifier;
 import org.firstinspires.ftc.teamcode.ColorSensor.ColorSensorWrapper;
+import org.firstinspires.ftc.teamcode.ColorSensor.SampleColors;
 import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
 import org.firstinspires.ftc.teamcode.EndEffector.ServoPositions;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
+import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Slides.HorizontalSlides;
 import org.firstinspires.ftc.teamcode.Slides.VerticalSlides;
 
@@ -24,12 +27,12 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 @Config
 @TeleOp(group= "Game", name = "Driver Controlled TeleOp")
 public class Main extends OpMode implements ServoPositions {
-    boolean gameTime = false; //player two can take over drive
+//    boolean gameTime = false; //player two can take over drive
     MecanumDrive mecanumDrive;
-    OdometryLinear odometry;
+//    OdometryLinear odometry;
     VerticalSlides verticalSlides;
     HorizontalSlides horizontalSlides;
-    Servo armServo, clawServo;
+    Servo armServoLeft, armServoRight, clawServo;
     ColorSensor clawColorSensor;
     ColorSensorWrapper colorSensorWrapper;
     ButtonToggle left1Bumper, right1Bumper, A2, X2, Y2;
@@ -37,17 +40,15 @@ public class Main extends OpMode implements ServoPositions {
     boolean isUsingFieldOriented;
     Timer timer;
 
-    double armSpecimenHeight = 0;
-    double armOuttakeHeight = 0;
-    double armSampleHeight = 0;
-
     @Override
     public void init() {
       mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-      odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
+//      odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0,0});
       verticalSlides = new VerticalSlides(hardwareMap);
-      armServo = hardwareMap.get(Servo.class, "Arm Servo");
+      armServoLeft = hardwareMap.get(Servo.class, "Arm Servo Left");
+      armServoRight = hardwareMap.get(Servo.class, "Arm Servo Right");
 
+      clawServo = hardwareMap.get(Servo.class, "Claw Grabber");
       clawColorSensor = hardwareMap.get(ColorSensor.class, "Claw Color Sensor");
       colorSensorWrapper = new ColorSensorWrapper(clawColorSensor, 2);
 
@@ -61,7 +62,7 @@ public class Main extends OpMode implements ServoPositions {
     }
 
     double power = 0.8;
-    double rotationResetConstant = 0.0;
+//    double rotationResetConstant = 0.0;
 
     public void handleDriverControls() {
 
@@ -88,17 +89,17 @@ public class Main extends OpMode implements ServoPositions {
 
         if (!isUsingFieldOriented) {
             //if gamepad 1 left bumper not turned on, or if turned off, toggle normal drive controlled by driver one x, y movements on sticks
-            mecanumDrive.normalDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x, power);
+            mecanumDrive.normalDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x, power);
         }
         else {
             //can use gamepad 1 left bumper to toggle field oriented drive controlled by driver one x, y movements on sticks
-            mecanumDrive.FieldOrientedDrive(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x,
-                        imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2d + rotationResetConstant, power);
+            mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x,
+                        imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + Math.PI / 2d, power);
         }
         //reset imu at 90 degrees angle(facing backstage) when a is clicked
         if (gamepad1.a) { // Temporary for field oriented drive, may come up with auto align functionality
             imu.resetYaw();
-            rotationResetConstant = Math.PI / 2; // Assumes resetting at 90˚ from starting position, aka facing backstage side
+//            rotationResetConstant = Math.PI / 2; // Assumes resetting at 90˚ from starting position, aka facing backstage side
         }
 
         telemetry.addData("Driver mode", isUsingFieldOriented ? "Field Oriented" : "Normal");
@@ -108,7 +109,9 @@ public class Main extends OpMode implements ServoPositions {
     @Override
     public void start() {
         clawServo.setPosition(ServoPositions.grabNeutral);
-        armServo.setPosition(ServoPositions.armNeutralHeight);
+        armServoLeft.setPosition(ServoPositions.armServoLeftSample);
+        armServoRight.setPosition(ServoPositions.armServoRightSample);
+        //face down
         //set vertical slides to neutral position
         //set horizontal Slides to neutral position
 
@@ -123,25 +126,29 @@ public class Main extends OpMode implements ServoPositions {
     public void handleManipulatorControls() {
         //helpful presets
         if(A2.update(gamepad2.a)){
-//            armServo.setPosition(ServoPositions.armSpecimenHeight);
-            verticalSlides.extendToDistance(armSpecimenHeight);
+            armServoLeft.setPosition(ServoPositions.armServoLeftSpecimen);
+            armServoRight.setPosition(ServoPositions.armServoRightSpecimen);
+
+//            verticalSlides.extendToDistance(armSpecimenHeight);
         }
 
         if(X2.update(gamepad2.x)){
-//            armServo.setPosition(ServoPositions.armOutakeHeight);
-            verticalSlides.extendToDistance(armOuttakeHeight);
+//            armServoLeft.setPosition(ServoPositions.armServoLeftSample);
+//            armServoRight.setPosition(ServoPositions.armServoRightSample);
+//            verticalSlides.extendToDistance(armOuttakeHeight);
         }
 
         if(Y2.update(gamepad2.y)){
-//            armServo.setPosition(ServoPositions.armSampleHeight);
-            verticalSlides.extendToDistance(armSampleHeight);
+            armServoLeft.setPosition(ServoPositions.armServoLeftSample);
+            armServoRight.setPosition(ServoPositions.armServoRightSample);
+//            verticalSlides.extendToDistance(armSampleHeight);
         }
 
-        //slides control
-        if (gamepad2.left_stick_x != 0 || gamepad2.left_stick_y != 0) {
-            horizontalSlides.extend(gamepad2.left_stick_x);
-            verticalSlides.verticalSlidesExtend(gamepad2.left_stick_y);
-        }
+//        //slides control
+//        if (gamepad2.left_stick_x != 0 || gamepad2.left_stick_y != 0) {
+//            horizontalSlides.extend(gamepad2.left_stick_x);
+//            verticalSlides.verticalSlidesExtend(gamepad2.left_stick_y);
+//        }
 
         if(gamepad2.right_bumper){
             if(!clawClosed){
@@ -152,10 +159,19 @@ public class Main extends OpMode implements ServoPositions {
             }
         }
 
+        //if grabbing sample, it will detect color
+        if(clawServo.getPosition() == ServoPositions.grabClosed) {
+            colorSensorWrapper.update();
+            RGBColor rgbColor = colorSensorWrapper.getValue();
 
-        if (gamepad2.left_bumper && !gameTime) { //disable this for actual game
-            mecanumDrive.normalDrive(power, -gamepad2.left_stick_x, gamepad2.left_stick_y, -gamepad2.right_stick_x);
+            SampleColors.Colors detected = ColorClassifier.classify(rgbColor);
+
+            telemetry.addData("Detected Color", detected);
         }
+
+//        if (gamepad2.left_bumper && !gameTime) { //disable this for actual game
+//            mecanumDrive.normalDrive(power, -gamepad2.left_stick_x, gamepad2.left_stick_y, -gamepad2.right_stick_x);
+//        }
 
     }
 

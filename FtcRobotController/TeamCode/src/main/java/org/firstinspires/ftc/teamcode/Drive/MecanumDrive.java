@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -13,10 +16,10 @@ public class MecanumDrive {
     public DcMotorEx BR;
 
     //RPM Constants
-    double FLmulti = (296/393);
-    double FRmulti = (296/318);
-    double BLmulti = (296/314);
-    double BRmulti = 1;
+    double FLmulti = ((double) 1);
+    double FRmulti = ((double) 1);
+    double BLmulti = ((double) 1);
+    double BRmulti = ((double) 1);
     
     
     Telemetry telemetry;
@@ -24,28 +27,33 @@ public class MecanumDrive {
     private double[] motorFinalInputs = new double[4];
     double previousX = 0.0;
     double previousY = 0.0;
+
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         FR = hardwareMap.get(DcMotorEx.class, "FR");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
         BR = hardwareMap.get(DcMotorEx.class, "BR");
 
-        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
         this.telemetry = telemetry;
+
 
         motorInputs = new double[4];
     }
+    double maxVelocity = 800;
 
-    public void normalDrive(double x, double y, double rotation, double power){
+    public void veloictyTest(double x, double y, double rotation, double power){
         double FLPower = y + x + rotation;
         double FRPower = y - x - rotation;
         double BLPower = y - x + rotation;
@@ -59,8 +67,35 @@ public class MecanumDrive {
             maxPower = Math.max(maxPower, motorInputs[i]);
         }
 
+        if(maxPower > 1) {
+            for (int i = 0; i < 4; i++) {
+                motorInputs[i] = motorInputs[i] / maxPower;
+            }
+        }
+
+
+        setVelocity(motorInputs[0], motorInputs[1], motorInputs[2], motorInputs[3], maxVelocity);
+    }
+
+    public void normalDrive(double x, double y, double rotation, double power){
+        double FLPower = y + x + rotation;
+        double FRPower = y - x - rotation;
+        double BLPower = y - x + rotation;
+        double BRPower = y + x - rotation;
+
+
+        motorInputs = new double[]{FLPower * FLmulti, FRPower * FRmulti, BLPower * BLmulti, BRPower * BRmulti};
+        double maxPower = 0;
+
+
         for(int i = 0; i < 4; i++){
-            motorInputs[i] = motorInputs[i] / maxPower;
+            maxPower = Math.max(maxPower, motorInputs[i]);
+        }
+
+        if(maxPower > 1) {
+            for (int i = 0; i < 4; i++) {
+                motorInputs[i] = (double) motorInputs[i] / maxPower;
+            }
         }
 
         setPowers(motorInputs[0], motorInputs[1], motorInputs[2], motorInputs[3], power);
@@ -117,7 +152,20 @@ public class MecanumDrive {
         FR.setPower(FRP * power);
         BL.setPower(BLP * power);
         BR.setPower(BRP * power);
-
     }
+
+    private void setVelocity(double FLP, double FRP, double BLP, double BRP, double maxVelocity) {
+
+        motorFinalInputs[0] = FLP * maxVelocity;
+        motorFinalInputs[1] = FRP * maxVelocity;
+        motorFinalInputs[2] = BLP * maxVelocity;
+        motorFinalInputs[3] = BRP * maxVelocity;
+
+        FL.setVelocity(FLP * maxVelocity);
+        FR.setVelocity(FRP * maxVelocity);
+        BL.setVelocity(BLP * maxVelocity);
+        BR.setVelocity(BRP * maxVelocity);
+    }
+
 
 }
