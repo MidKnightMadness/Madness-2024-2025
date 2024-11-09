@@ -13,11 +13,11 @@ public class MecanumDrive {
     public DcMotorEx BR;
 
     //RPM Constants
-    double FLmulti = (296/393);
-    double FRmulti = (296/318);
-    double BLmulti = (296/314);
+    double FLmulti = (double) (296/393);
+    double FRmulti =  (double) (296/318);
+    double BLmulti = (double) (296/314);
     double BRmulti = 1;
-    
+    //sometin
     
     Telemetry telemetry;
     private double[] motorInputs;
