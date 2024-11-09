@@ -54,7 +54,7 @@ public class DriveTest extends OpMode {
         }
         if(gamepad1.left_bumper){
 //            odometry.update();
-            mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle, drivePower);
+          //  mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x drivePower);
             telemetry.addLine("Driver Field Oriented");
         }
         //Robot oriented

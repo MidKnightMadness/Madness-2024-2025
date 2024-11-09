@@ -13,9 +13,9 @@ public class MecanumDrive {
     public DcMotorEx BR;
 
     //RPM Constants
-    double FLmulti = (double) (296/393);
-    double FRmulti =  (double) (296/318);
-    double BLmulti = (double) (296/314);
+    double FLmulti = (double) 296/393;
+    double FRmulti =  (double) 296/318;
+    double BLmulti = (double) 296/314;
     double BRmulti = 1;
     //sometin
     
@@ -58,9 +58,11 @@ public class MecanumDrive {
         for(int i = 0; i < 4; i++){
             maxPower = Math.max(maxPower, motorInputs[i]);
         }
+        if(maxPower > 1) {
 
-        for(int i = 0; i < 4; i++){
-            motorInputs[i] = motorInputs[i] / maxPower;
+            for (int i = 0; i < 4; i++) {
+                motorInputs[i] = (double) motorInputs[i] / maxPower;
+            }
         }
 
         setPowers(motorInputs[0], motorInputs[1], motorInputs[2], motorInputs[3], power);
@@ -106,17 +108,31 @@ public class MecanumDrive {
         telemetry.addData("BL",  motorFinalInputs[2]);
         telemetry.addData("BR",  motorFinalInputs[3]);
     }
+//    private void setPowers(double FLP, double FRP, double BLP, double BRP, double power) {
+//
+//        motorFinalInputs[0] = FLP * power;
+//        motorFinalInputs[1] = FRP * power;
+//        motorFinalInputs[2] = BLP * power;
+//        motorFinalInputs[3] = BRP * power;
+//
+//        FL.setPower(FLP * power);
+//        FR.setPower(FRP * power);
+//        BL.setPower(BLP * power);
+//        BR.setPower(BRP * power);
+//
+//    }
+
     private void setPowers(double FLP, double FRP, double BLP, double BRP, double power) {
 
-        motorFinalInputs[0] = FLP * power;
-        motorFinalInputs[1] = FRP * power;
-        motorFinalInputs[2] = BLP * power;
-        motorFinalInputs[3] = BRP * power;
+        motorFinalInputs[0] = FLP * FLmulti;
+        motorFinalInputs[1] = FRP * FRmulti;
+        motorFinalInputs[2] = BLP * BLmulti;
+        motorFinalInputs[3] = BRP * BRmulti;
 
-        FL.setPower(FLP * power);
-        FR.setPower(FRP * power);
-        BL.setPower(BLP * power);
-        BR.setPower(BRP * power);
+        FL.setPower(motorFinalInputs[0]);
+        FR.setPower(motorFinalInputs[1]);
+        BL.setPower(motorFinalInputs[2]);
+        BR.setPower(motorFinalInputs[3]);
 
     }
 
