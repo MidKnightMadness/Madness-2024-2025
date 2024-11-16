@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Drive.OdometryArc;
 import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
@@ -17,6 +22,7 @@ public class OdometryTest extends OpMode{
     ButtonToggle left1Bumper, right1Bumper;
 
 
+    IMU imu;
 
     @Override
     public void init() {
@@ -24,7 +30,17 @@ public class OdometryTest extends OpMode{
         left1Bumper = new ButtonToggle();
         right1Bumper = new ButtonToggle();
 
-        linearOdo = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0, 0});
+        linearOdo = new OdometryLinear(hardwareMap, telemetry, new double[]{7.75,7.25, Math.toRadians(90)});
+
+        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
+        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
+
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+        imu.resetYaw();
     }
 
     boolean isUsingFieldOriented;
@@ -53,12 +69,15 @@ public class OdometryTest extends OpMode{
             }
         }
 
+        if(gamepad1.dpad_up){
+            mecanumDrive.resetEncoders();
+        }
+
         linearOdo.update();
 
 
-        telemetry.addLine("----------------------------------");
 
-        linearOdo.telemtry();
+        linearOdo.telemetry();
 
         if(isUsingFieldOriented){
             mecanumDrive.velocityDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, 1000);
@@ -69,5 +88,8 @@ public class OdometryTest extends OpMode{
             telemetry.addLine("Normal Drive");
         }
 
+
+        telemetry.addData("IMU Roll", imu.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
+        telemetry.update();
     }
 }

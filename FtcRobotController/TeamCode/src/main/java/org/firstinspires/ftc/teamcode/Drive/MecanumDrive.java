@@ -15,18 +15,37 @@ public class MecanumDrive {
     public DcMotorEx BL;
     public DcMotorEx BR;
 
-    //RPM Constants
-    double FLmulti = ((double) 1);
-    double FRmulti = ((double) 1);
-    double BLmulti = ((double) 1);
-    double BRmulti = ((double) 1);
+    //RPM Constants Madness 2024 Robot
+//    double FLmulti = ((double) 1);
+//    double FRmulti = ((double) 1);
+//    double BLmulti = ((double) 1);
+//    double BRmulti = ((double) 1);
     
-    
+
+    //RPM Constants Old Chassis
+    double FLmulti =  0.96257;
+    double FRmulti =  0.84841;
+    double BLmulti = 0.69347;
+    double BRmulti = ((double) 296 / 318);
+
     Telemetry telemetry;
     private double[] motorInputs;
     private double[] motorFinalInputs = new double[4];
     double previousX = 0.0;
     double previousY = 0.0;
+
+
+    public void resetEncoders(){
+        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry){
         FL = hardwareMap.get(DcMotorEx.class, "FL");
@@ -44,11 +63,16 @@ public class MecanumDrive {
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+//        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+//        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        //Old chassis :
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
         BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
         this.telemetry = telemetry;
 
 
+        resetEncoders();
         motorInputs = new double[4];
     }
 

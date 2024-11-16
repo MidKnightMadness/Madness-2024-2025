@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 
-//@TeleOp(name = "motor test")
+@TeleOp(name = "motor test")
 public class MotorDrive extends OpMode {
 
     public DcMotor FR;
@@ -16,7 +16,7 @@ public class MotorDrive extends OpMode {
     public DcMotor BR;
     public DcMotor BL;
     double FLMultiplier = 0.5;
-    double FRMultiplier = 2.5;
+    double FRMultiplier = 0.5;
     double BLMultiplier = 0.5;
     double BRMultiplier = 0.5;
 
@@ -65,9 +65,9 @@ public class MotorDrive extends OpMode {
         BR.setPower(1);
 
         if(gamepad1.left_bumper){
-            RPMfl = ( FL.getCurrentPosition() / timer.updateTime()) / (3.14 * 9.6);
-            RPMfr = FR.getCurrentPosition() / timer.updateTime() / (3.14 * 9.6);
-            RPMbl = BL.getCurrentPosition() / timer.updateTime() / (3.14 * 9.6);
+            RPMfl = ( FL.getCurrentPosition() / timer.updateTime());
+            RPMfr = FR.getCurrentPosition() / timer.updateTime();
+            RPMbl = BL.getCurrentPosition() / timer.updateTime();
             RPMbr = BR.getCurrentPosition() / timer.updateTime();
         }
 
