@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 public class MecanumDrive {
     public DcMotorEx FL;
@@ -23,16 +24,18 @@ public class MecanumDrive {
     
 
     //RPM Constants Old Chassis
-    double FLmulti =  0.96257;
-    double FRmulti =  0.84841;
-    double BLmulti = 0.69347;
-    double BRmulti = ((double) 296 / 318);
+    double FLmulti =  1;
+    double FRmulti =  1;
+    double BLmulti = 1;
+    double BRmulti = 1;
 
     Telemetry telemetry;
     private double[] motorInputs;
     private double[] motorFinalInputs = new double[4];
+    private double[] motorVelocity = new double[4];
     double previousX = 0.0;
     double previousY = 0.0;
+    Timer timer;
 
 
     public void resetEncoders(){
@@ -72,6 +75,7 @@ public class MecanumDrive {
         this.telemetry = telemetry;
 
 
+        timer = new Timer();
         resetEncoders();
         motorInputs = new double[4];
     }
@@ -122,6 +126,11 @@ public class MecanumDrive {
         }
 
         setPowers(motorInputs[0], motorInputs[1], motorInputs[2], motorInputs[3], power);
+        timer.updateTime();
+        for(int i = 0; i < 4; i++) {
+            motorVelocity[i] = motorInputs[i] / timer.getDeltaTime();
+        }
+
     }
 
     double lowPassConstantPrevious = 0.1;
@@ -164,6 +173,10 @@ public class MecanumDrive {
         telemetry.addData("BL",  motorFinalInputs[2]);
         telemetry.addData("BR",  motorFinalInputs[3]);
     }
+
+    public double[] getVelocity(){
+        return motorVelocity;
+    }
     public void setPowers(double FLP, double FRP, double BLP, double BRP, double power) {
 
         motorFinalInputs[0] = FLP * power;
@@ -188,6 +201,10 @@ public class MecanumDrive {
         FR.setVelocity(FRP * maxVelocity);
         BL.setVelocity(BLP * maxVelocity);
         BR.setVelocity(BRP * maxVelocity);
+    }
+
+    public double[] getMotorInputs(){
+        return motorFinalInputs;
     }
 
 

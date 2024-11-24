@@ -67,8 +67,7 @@ public class ClawTester extends OpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
         colorSensorWrapper = new ColorSensorWrapper(colorSensor, bufferSize);
 
-//        packet = new TelemetryPacket();
-//        dashboard = FtcDashboard.getInstance();
+
         
     }
 

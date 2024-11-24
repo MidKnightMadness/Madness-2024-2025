@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class OdometryLinear {
 
-11/15    double inPerEncoderTick = 1 / 25.4 * 32 * Math.PI / 2000d;
+    double inPerEncoderTick = 1 / 25.4 * 32 * Math.PI / 2000d;
     double trackDistance = 12.1;//in //11 for old chassis
     double distVertEncoders = 0.14;//in
 
@@ -87,18 +87,18 @@ public class OdometryLinear {
         double deltaRightTicks = rightEncoder.getCurrentPosition() - previousEncoderVals[1];
         double deltaFrontTicks = frontEncoder.getCurrentPosition() - previousEncoderVals[2];
 
-        //left and right encoders are negative when moving forward, horizontal encoder positive when moving right
+        //left and right encoders are negative when moving forward, horizontal encoder positive when rotating clockwise
 
-        deltaRobotX = -inPerEncoderTick * (deltaLeftTicks + deltaRightTicks) / 2;
-        deltaTheta =  inPerEncoderTick * (deltaRightTicks - deltaLeftTicks) / trackDistance * thetaMultiplier;
-        deltaRobotY = -inPerEncoderTick * (deltaFrontTicks - distVertEncoders * (deltaRightTicks + deltaLeftTicks) / trackDistance);
+        deltaRobotX = inPerEncoderTick * (deltaLeftTicks + deltaRightTicks) / 2;
+        deltaTheta =  -inPerEncoderTick * (deltaLeftTicks - deltaRightTicks) / trackDistance * thetaMultiplier;
+        deltaRobotY = inPerEncoderTick * (deltaFrontTicks - distVertEncoders * (deltaRightTicks + deltaLeftTicks) / trackDistance);
 
         //change to field coordinates
 
-        rotation = normalizeAngleRadians(deltaTheta/2 + normalizeAngleRadians(rotation));
+        rotation = normalizeAngleRadians(normalizeAngleRadians(deltaTheta/2) + normalizeAngleRadians(rotation));
         //still have to normalize rotation
 
-        deltaFieldX = deltaRobotX * Math.cos(rotation) - deltaRobotY * Math.sin(rotation);
+        deltaFieldX = -(deltaRobotX * Math.cos(rotation) - deltaRobotY * Math.sin(rotation));
         deltaFieldY = deltaRobotX * Math.sin(rotation) + deltaRobotY * Math.cos(rotation);
 
         position[0] = position[0] + deltaFieldX;
@@ -116,7 +116,7 @@ public class OdometryLinear {
         previousEncoderVals[1] = rightEncoder.getCurrentPosition();
         previousEncoderVals[2] = frontEncoder.getCurrentPosition();
 
-        rotation = normalizeAngleRadians(deltaTheta/2 + normalizeAngleRadians(rotation));
+        rotation = normalizeAngleRadians(normalizeAngleRadians(deltaTheta/2) + normalizeAngleRadians(rotation));
         previousTime = elapsedTime.time();
 
 
@@ -124,6 +124,7 @@ public class OdometryLinear {
 
     public void telemetry(){
 
+        telemetry.addLine("Odometry Linear");
         telemetry.addLine("----------------------------------");
         telemetry.addData("Encoder Left Position", leftEncoder.getCurrentPosition());
         telemetry.addData("Encoder Right Position", rightEncoder.getCurrentPosition());

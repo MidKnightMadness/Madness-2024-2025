@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 @TeleOp(name  = "Drive Robot")
 public class DriveTest extends OpMode {
-    PIDBasic PIDDrive;
+//    PIDBasic PIDDrive;
     //    OdometryLinear odometry;
     MecanumDrive mecanumDrive;
     public double[] targetStates = {40, 60, 20};
@@ -32,15 +32,15 @@ public class DriveTest extends OpMode {
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
         telemetry.update();
 
-        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
-        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
-
-        imu = hardwareMap.get(IMU.class, "imu");
-
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-
-        imu.resetYaw();
+//        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
+//        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
+//
+//        imu = hardwareMap.get(IMU.class, "imu");
+//
+//        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
+//        imu.initialize(new IMU.Parameters(orientationOnRobot));
+//
+//        imu.resetYaw();
     }
 
     double[] pidOutputs = new double[3];

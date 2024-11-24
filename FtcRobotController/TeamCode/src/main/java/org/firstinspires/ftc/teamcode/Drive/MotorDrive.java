@@ -46,6 +46,7 @@ public class MotorDrive extends OpMode {
         BL = hardwareMap.get(DcMotor.class, "BL");
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         timer = new Timer();
 
     }
@@ -57,6 +58,7 @@ public class MotorDrive extends OpMode {
     @Override
     public void loop() {
         telemetry.addData("Time", timer.updateTime());
+        timer.updateTime();
         telemetry.addData("Delta Time", timer.getDeltaTime());
 
         FL.setPower(1);
@@ -64,25 +66,24 @@ public class MotorDrive extends OpMode {
         BL.setPower(1);
         BR.setPower(1);
 
+
         if(gamepad1.left_bumper){
-            RPMfl = ( FL.getCurrentPosition() / timer.updateTime());
-            RPMfr = FR.getCurrentPosition() / timer.updateTime();
-            RPMbl = BL.getCurrentPosition() / timer.updateTime();
-            RPMbr = BR.getCurrentPosition() / timer.updateTime();
+           RPMfl = ( FL.getCurrentPosition() / timer.getDeltaTime());
+           RPMfr = FR.getCurrentPosition() / timer.updateTime();
+           RPMbl = BL.getCurrentPosition() / timer.updateTime();
+           RPMbr = BR.getCurrentPosition() / timer.updateTime();
         }
 
         telemetry.addData("FL Pos", FL.getCurrentPosition());
         telemetry.addData("FR Pos", FR.getCurrentPosition());
         telemetry.addData("BL Pos", BL.getCurrentPosition());
         telemetry.addData("BR Pos", BR.getCurrentPosition());
-
-
+//
+//
         telemetry.addData("RPM FL", RPMfl);
         telemetry.addData("RPM FR", RPMfr);
         telemetry.addData("RPM BL", RPMbl);
         telemetry.addData("RPM BR", RPMbr);
-        timer.updateTime();
-
 
 
 

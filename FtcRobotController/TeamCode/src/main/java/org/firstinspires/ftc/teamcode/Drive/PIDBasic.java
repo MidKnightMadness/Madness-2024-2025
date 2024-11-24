@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.Drive;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 public class PIDBasic {
     OdometryLinear odometry;
     private Telemetry telemetry;
     //Madness Chassis Into the Deep
-    double[] P = new double[]{0, 0, 0};
+    double[] P = new double[]{0.01, 0.01, 0.01};
     double[] I = new double[]{0, 0, 0};
     double[] D = new double[]{0, 0, 0};
     double[] Kv = new double[]{0, 0, 0};
@@ -80,6 +81,10 @@ public class PIDBasic {
         telemetry.addData("DX", DGains[0]);
         telemetry.addData("DY", DGains[1]);
         telemetry.addData("DTheta", DGains[2]);
+
+        telemetry.addData("Total GainsX", totalGains[0]);
+        telemetry.addData("Total GainsY", totalGains[1]);
+        telemetry.addData("Total GainsTheta", totalGains[2]);
 
         //Calculate P Gains
         PGains[0] = (targetStates[0] - odometry.getXCoordinate()) * P[0];
