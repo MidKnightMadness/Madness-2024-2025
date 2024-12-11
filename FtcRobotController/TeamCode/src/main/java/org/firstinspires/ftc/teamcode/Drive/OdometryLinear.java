@@ -41,9 +41,9 @@ public class OdometryLinear {
 //        frontEncoder = hardwareMap.get(DcMotor.class, "BR");
 
         //test robot
-        leftEncoder = hardwareMap.get(DcMotor.class, "BL");
-        rightEncoder = hardwareMap.get(DcMotor.class, "FL");
-        frontEncoder = hardwareMap.get(DcMotor.class, "FR");
+        leftEncoder = hardwareMap.get(DcMotor.class, "FL");
+        rightEncoder = hardwareMap.get(DcMotor.class, "FR");
+        frontEncoder = hardwareMap.get(DcMotor.class, "BL");
 
         previousEncoderVals[0] = leftEncoder.getCurrentPosition();
         previousEncoderVals[1] = rightEncoder.getCurrentPosition();
@@ -91,7 +91,7 @@ public class OdometryLinear {
 
         deltaRobotX = inPerEncoderTick * (deltaLeftTicks + deltaRightTicks) / 2;
         deltaTheta =  -inPerEncoderTick * (deltaLeftTicks - deltaRightTicks) / trackDistance * thetaMultiplier;
-        deltaRobotY = inPerEncoderTick * (deltaFrontTicks - distVertEncoders * (deltaRightTicks + deltaLeftTicks) / trackDistance);
+        deltaRobotY = -inPerEncoderTick * (deltaFrontTicks - distVertEncoders * (deltaRightTicks + deltaLeftTicks) / trackDistance);
 
         //change to field coordinates
 

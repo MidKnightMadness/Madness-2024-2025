@@ -320,7 +320,7 @@ public class DeadReckoningDrive {
     double backDropToWallTolerance = 10d;
 
 
-    @Deprecated
+
     void driveForward(double distance, Telemetry telemetry) {
         double minPower = 0.225;
         double maxPower = 0.5;

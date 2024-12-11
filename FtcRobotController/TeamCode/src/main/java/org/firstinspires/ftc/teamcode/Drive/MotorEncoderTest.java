@@ -15,6 +15,7 @@ public class MotorEncoderTest extends OpMode {
     public DcMotor FL;
     public DcMotor BR;
     public DcMotor BL;
+
     double FLMultiplier = 0.5;
     double FRMultiplier = 0.5;
     double BLMultiplier = 0.5;
@@ -29,12 +30,12 @@ public class MotorEncoderTest extends OpMode {
 
     public void resetEncoders(){
         FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -50,6 +51,9 @@ public class MotorEncoderTest extends OpMode {
         FR = hardwareMap.get(DcMotor.class, "FR");
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        resetEncoders();
 //
 //        BR = hardwareMap.get(DcMotor.class, "BR");
 //        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -69,8 +73,14 @@ public class MotorEncoderTest extends OpMode {
     double RPMbr;
     @Override
     public void loop() {
-        telemetry.addData("Time", timer.updateTime());
-        telemetry.addData("Delta Time", timer.getDeltaTime());
+
+        double currentTime = timer.updateTimeR();
+        double previousTime = timer.getPreviousTime();
+        timer.updatePreviousTime();
+
+        telemetry.addData("Current Time", currentTime);
+        telemetry.addData("Delta Time", currentTime - previousTime);
+        telemetry.addData("Previous Time", previousTime);
 
         FL.setPower(1);
         FR.setPower(1);
@@ -78,15 +88,16 @@ public class MotorEncoderTest extends OpMode {
 //        BR.setPower(1);
 
 
-        RPMfl = ((FL.getCurrentPosition() - previousFL) * 60 / (TICKS_PER_REV * timer.getDeltaTime()));
-        RPMfl = ((FR.getCurrentPosition() - previousFR) * 60 / (TICKS_PER_REV * timer.getDeltaTime()));
 
-        if(gamepad1.left_bumper){
-            resetEncoders();
-//            RPMbl = BL.getCurrentPosition() / timer.updateTime();
-//            RPMbr = BR.getCurrentPosition() / timer.updateTime();
-        }
 
+
+        RPMfl = (double) ((FL.getCurrentPosition() - previousFL) * 60 / (TICKS_PER_REV * (currentTime - previousTime)));
+        RPMfr = (double) ((FR.getCurrentPosition() - previousFR) * 60 / (TICKS_PER_REV * (currentTime - previousTime)));
+
+
+
+        telemetry.addData("FLInfo", FL.getConnectionInfo());
+        telemetry.addData("FRInfo", FR.getConnectionInfo());
 
         telemetry.addData("FL Pos", FL.getCurrentPosition());
         telemetry.addData("FR Pos", FR.getCurrentPosition());

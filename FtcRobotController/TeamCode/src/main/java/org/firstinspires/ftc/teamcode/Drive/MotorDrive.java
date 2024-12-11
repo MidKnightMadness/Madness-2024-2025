@@ -13,8 +13,8 @@ public class MotorDrive extends OpMode {
 
     public DcMotor FR;
     public DcMotor FL;
-    public DcMotor BR;
-    public DcMotor BL;
+//    public DcMotor BR;
+//    public DcMotor BL;
     double FLMultiplier = 0.5;
     double FRMultiplier = 0.5;
     double BLMultiplier = 0.5;
@@ -38,14 +38,14 @@ public class MotorDrive extends OpMode {
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        BR = hardwareMap.get(DcMotor.class, "BR");
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL = hardwareMap.get(DcMotor.class, "BL");
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        BR = hardwareMap.get(DcMotor.class, "BR");
+//        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+//        BL = hardwareMap.get(DcMotor.class, "BL");
+//        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         timer = new Timer();
 
@@ -63,21 +63,21 @@ public class MotorDrive extends OpMode {
 
         FL.setPower(1);
         FR.setPower(1);
-        BL.setPower(1);
-        BR.setPower(1);
+//        BL.setPower(1);
+//        BR.setPower(1);
 
 
         if(gamepad1.left_bumper){
-           RPMfl = ( FL.getCurrentPosition() / timer.getDeltaTime());
-           RPMfr = FR.getCurrentPosition() / timer.updateTime();
-           RPMbl = BL.getCurrentPosition() / timer.updateTime();
-           RPMbr = BR.getCurrentPosition() / timer.updateTime();
+           RPMfl = (FL.getCurrentPosition() / timer.getDeltaTime());
+//           RPMfr = FR.getCurrentPosition() / timer.updateTime();
+//           RPMbl = BL.getCurrentPosition() / timer.updateTime();
+//           RPMbr = BR.getCurrentPosition() / timer.updateTime();
         }
 
         telemetry.addData("FL Pos", FL.getCurrentPosition());
         telemetry.addData("FR Pos", FR.getCurrentPosition());
-        telemetry.addData("BL Pos", BL.getCurrentPosition());
-        telemetry.addData("BR Pos", BR.getCurrentPosition());
+//        telemetry.addData("BL Pos", BL.getCurrentPosition());
+//        telemetry.addData("BR Pos", BR.getCurrentPosition());
 //
 //
         telemetry.addData("RPM FL", RPMfl);
@@ -89,8 +89,8 @@ public class MotorDrive extends OpMode {
 
 
         //test
-        previousBR = BR.getCurrentPosition();
-        previousBL = BL.getCurrentPosition();
+//        previousBR = BR.getCurrentPosition();
+//        previousBL = BL.getCurrentPosition();
         previousFL = FL.getCurrentPosition();
         previousFR = FR.getCurrentPosition();
 

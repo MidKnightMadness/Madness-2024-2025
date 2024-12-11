@@ -26,12 +26,22 @@ public class Timer {
 
     public double updateTime(){
         currentTime = elapsedTime.time();
-        deltaTime = currentTime - previousTime;
+        deltaTime = (double) currentTime - previousTime;
         previousTime = currentTime;
 
         return currentTime;
     }
 
+    public double updateTimeR(){
+        currentTime = elapsedTime.time();
+        deltaTime = (double) currentTime - previousTime;
+
+        return currentTime;
+    }
+
+    public void updatePreviousTime(){
+        previousTime = currentTime;
+    }
 
     public void restart(){
         elapsedTime = new ElapsedTime();
