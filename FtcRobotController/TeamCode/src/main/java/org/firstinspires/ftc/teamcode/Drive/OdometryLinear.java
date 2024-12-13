@@ -118,8 +118,6 @@ public class OdometryLinear {
 
         rotation = normalizeAngleRadians(normalizeAngleRadians(deltaTheta/2) + normalizeAngleRadians(rotation));
         previousTime = elapsedTime.time();
-
-
     }
 
     public void telemetry(){

@@ -11,6 +11,7 @@ public class CloseAuto extends AutoDrive{
     public void park() {
 
         deadReckoningDrive.setMotorVelocitiesForTime(moveRightTime, 0.5, 0, 0, 1000, telemetry);
+
     }
 
     @Override

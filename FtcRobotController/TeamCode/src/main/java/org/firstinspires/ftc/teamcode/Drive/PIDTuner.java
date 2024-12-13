@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 //@Config
 //@TeleOp
+@Disabled
 public class PIDTuner extends OpMode {
     double Px = 0.0;
     double Py = 0.0;

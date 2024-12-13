@@ -20,6 +20,9 @@ public class FarAuto extends AutoDrive{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        // RPM of wheels: vel * 60 / 2pi / 16
+
         deadReckoningDrive.setMotorVelocitiesForTime(5, 0.5, 0, 0, 1000, telemetry);
 
         try {

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DistanceSensor;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 //@TeleOp(name = "Distance Sensor Test")
+@Disabled
 public class DistanceSensorTest extends OpMode {
 
     DistanceSensor distanceSensor;
