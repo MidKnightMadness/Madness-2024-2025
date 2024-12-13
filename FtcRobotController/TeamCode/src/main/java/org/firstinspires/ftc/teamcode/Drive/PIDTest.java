@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Helper.Pose;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 //@TeleOp(name = "PID Test")
+@Disabled
 public class PIDTest extends OpMode {
 
     PIDBasic pidBasic;

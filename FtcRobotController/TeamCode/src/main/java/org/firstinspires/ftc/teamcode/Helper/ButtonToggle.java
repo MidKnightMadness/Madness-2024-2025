@@ -8,11 +8,12 @@ public class ButtonToggle {
     }
 
     public boolean update(boolean stateValue){
-        if(stateValue == true && value == false){
+        if(stateValue && !value){
             value = true;
             return value;
         }
         value = false;
+
         return value;
     }
 

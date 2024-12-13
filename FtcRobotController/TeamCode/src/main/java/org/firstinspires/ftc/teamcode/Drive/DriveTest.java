@@ -1,148 +1,106 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.EndEffector.ServoPositions;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
+import org.firstinspires.ftc.teamcode.Helper.IMUWrapper;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 @TeleOp(name  = "Drive Robot")
-public class DriveTest extends OpMode {
-//    PIDBasic PIDDrive;
-    //    OdometryLinear odometry;
+public class DriveTest extends OpMode implements ServoPositions {
+    TwoWheelOdometry odometry;
     MecanumDrive mecanumDrive;
-    public double[] targetStates = {40, 60, 20};
+
     Timer timer;
-    IMU imu;
-//    ButtonToggle left1Bumper, right1Bumper;
-//    boolean isUsingFieldOriented;
+    IMUWrapper imu;
+
+    DcMotorEx leftMotor;
+    DcMotorEx rightMotor;
+
+    CRServo leftServo;
+    CRServo rightServo;
+
+
+    Servo wristServo;
+    Servo clawServo;
 
     @Override
     public void init() {
-//        left1Bumper = new ButtonToggle();
-//        right1Bumper = new ButtonToggle();
         timer = new Timer();
-//        odometry = new OdometryLinear(hardwareMap, telemetry, new double[]{0,0, Math.PI/2});
-        mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        telemetry.update();
 
-//        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up
-//        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.UP;   // usb facing forward
-//
-//        imu = hardwareMap.get(IMU.class, "imu");
-//
-//        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
-//        imu.initialize(new IMU.Parameters(orientationOnRobot));
-//
-//        imu.resetYaw();
+        leftMotor = hardwareMap.get(DcMotorEx.class, "leftSlideMotor");
+        rightMotor = hardwareMap.get(DcMotorEx.class, "rightSlideMotor");
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        wristServo = hardwareMap.get(Servo.class, "leftWristServo");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
+
+        mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
+        odometry = new TwoWheelOdometry(hardwareMap, telemetry);
+
+        leftServo = hardwareMap.get(CRServo.class, "Horizontal Slides Left");
+        rightServo = hardwareMap.get(CRServo.class, "Horizontal Slides Right");
+
+        imu = new IMUWrapper(hardwareMap, telemetry);
+        imu.calibrateBiases();
+        telemetry.update();
     }
 
-    double[] pidOutputs = new double[3];
     double drivePower = 0.8;
 
     @Override
     public void loop() {
-//        odometry.update();
-
-//
-//        //POINT to POINT PID
-//        PIDDrive = new PIDBasic(odometry, targetStates[0], targetStates[1], targetStates[2], telemetry);
-//        pidOutputs = PIDDrive.updatePID();
-//        mecanumDrive.FieldOrientedDrive(pidOutputs[0], pidOutputs[1], pidOutputs[2], drivePower);
-//        telemetry.addLine("Point to Point PID");
-
-        //Driver Field Oriented
-
-
-//            odometry.update();
-
-//        if (left1Bumper.update(gamepad1.left_bumper)) {
-//            isUsingFieldOriented = !isUsingFieldOriented;
-//            gamepad1.rumble(100);
-//        }
-
-
-//        if(right1Bumper.update(gamepad1.right_bumper)){
-//            if(drivePower == 0.8){
-//                drivePower = 0.5;
-//                gamepad1.rumble(300);
-//            }
-//            else if(drivePower == 0.5){
-//                drivePower = 0.3;
-//                gamepad1.rumble(400);
-//            }
-//            else{
-//                drivePower = 0.8;
-//                gamepad1.rumble(500);
-//            }
-//        }
-        //Robot oriented
-
-//
-//        if(isUsingFieldOriented){
-//            mecanumDrive.velocityDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, 1000);
-//            telemetry.addLine("Velocity Drive");
-//////            odometry.update();
-//////            mecanumDrive.veloictyTest(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
-//////            telemetry.addLine("Velocity set");
-////
-////            telemetry.addData("Gampead 1 Left stick x", gamepad1.left_stick_x);
-////            telemetry.addData("Gamepad 1 Left stick y", gamepad1.left_stick_y);
-////            telemetry.addData("Gamepad 1 Right Stick x", gamepad1.right_stick_x);
-////            telemetry.addData("Drive Power", power);
-////
-////            telemetry.addData("FR Velocity", mecanumDrive.FR.getVelocity());
-////            telemetry.addData("FL Velocity", mecanumDrive.FL.getVelocity());
-////            telemetry.addData("BR Velocity", mecanumDrive.BR.getVelocity());
-////            telemetry.addData("BL Velocity", mecanumDrive.BL.getVelocity());
-////            double rotation = ((imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - 180) % 360 + 180) + Math.PI / 2d;
-////            telemetry.addData("Rotation", rotation);
-////
-////            mecanumDrive.FieldOrientedDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, rotation, power);
-//            telemetry.addData("Gampead 1 Left stick x", gamepad1.left_stick_x);
-//            telemetry.addData("Gamepad 1 Left stick y", gamepad1.left_stick_y);
-//            telemetry.addData("Gamepad 1 Right Stick x", gamepad1.right_stick_x);
-//
-//            telemetry.addData("FR Velocity", mecanumDrive.FR.getVelocity());
-//            telemetry.addData("FL Velocity", mecanumDrive.FL.getVelocity());
-//            telemetry.addData("BR Velocity", mecanumDrive.BR.getVelocity());
-//            telemetry.addData("BL Velocity", mecanumDrive.BL.getVelocity());
-//            mecanumDrive.updateTelemetry();
-//        }
-//        else{
-//            odometry.update();
         telemetry.addLine("Robot Oriented");
         mecanumDrive.normalDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, drivePower);
 
-        telemetry.addData("Gampead 1 Left stick x", gamepad1.left_stick_x);
-        telemetry.addData("Gamepad 1 Left stick y", -gamepad1.left_stick_y);
-        telemetry.addData("Gamepad 1 Right Stick x", gamepad1.right_stick_x);
-        telemetry.addData("Drive Power", drivePower);
+        int verticalDirection = gamepad1.right_bumper ? 1 : -1;
+        runVerticalWithPosition(gamepad1.right_trigger, verticalDirection);
+//        rightMotor.setPower(gamepad1.right_trigger * verticalDirection);
+//        leftMotor.setPower(gamepad1.right_trigger * verticalDirection);
 
+        int horizontalDirection = gamepad1.left_bumper ? 1 : -1;
+        leftServo.setPower(gamepad1.left_trigger * horizontalDirection);
+        rightServo.setPower(gamepad1.left_trigger * horizontalDirection);
+
+        // rightMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(0.2, 0.4, 0.5, 0.05));
+
+        imu.update();
+        odometry.update();
 
         telemetry.addData("FR Velocity", mecanumDrive.FR.getVelocity());
         telemetry.addData("FL Velocity", mecanumDrive.FL.getVelocity());
         telemetry.addData("BR Velocity", mecanumDrive.BR.getVelocity());
         telemetry.addData("BL Velocity", mecanumDrive.BL.getVelocity());
+
+        telemetry.addData("Right motor pos", rightMotor.getCurrentPosition());
+        telemetry.addData("Left motor pos", leftMotor.getCurrentPosition());
+
+        telemetry.addData("X", odometry.getXCoordinate());
+        telemetry.addData("Y", odometry.getYCoordinate());
+        telemetry.addData("Yaw", odometry.getYaw() * 180 / Math.PI);
+
         mecanumDrive.updateTelemetry();
     }
-//        telemetry.addData("Robot X", odometry.getXCoordinate());
-//        telemetry.addData("Robot Y", odometry.getYCoordinate());
-//        telemetry.addData("Robot Theta", odometry.getRotationDegrees());
-//
-//        telemetry.addData("Robot X Velocity", odometry.getVelocityX());
-//        telemetry.addData("Robot Y Velocity", odometry.getVelocityY());
-//
-//        telemetry.addData("Time", timer.updateTime());
-//
-//        telemetry.update();
-//
-//    }
+
+    double changeTicks;
+    void runVerticalWithPosition(double power, int direction) {
+        changeTicks += (power * direction);
+        rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + (int) changeTicks);
+        leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + (int) changeTicks);
+    }
+
+    void runVerticalWithPowers(double power, int direction) {
+        rightMotor.setPower(power * direction);
+        leftMotor.setPower(power * direction);
+    }
 }
 

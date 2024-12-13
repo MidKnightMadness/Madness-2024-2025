@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpticalSensor;
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Helper.Pose;
 
 @TeleOp(name = "Optical Odometry")
+@Disabled
 public class OpticalOdometryTest extends OpMode {
 
     SparkFunOTOS sensor;

@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
@@ -66,11 +64,9 @@ public class MecanumDrive {
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+//        BL.setDirection(DcMotorSimple.Direction.REVERSE);
 //        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        //Old chassis :
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
         this.telemetry = telemetry;
 
@@ -81,10 +77,10 @@ public class MecanumDrive {
     }
 
     public void velocityDrive(double x, double y, double rotation, double maxVelocity){
-        double FLPower = y + x + rotation;
+        double FLPower = y + x - rotation;
         double FRPower = y - x - rotation;
         double BLPower = y - x + rotation;
-        double BRPower = y + x - rotation;
+        double BRPower = y + x + rotation;
 
 
         motorInputs = new double[]{FLPower * FLmulti, FRPower * FRmulti, BLPower * BLmulti, BRPower * BRmulti};
@@ -105,10 +101,10 @@ public class MecanumDrive {
     }
 
     public void normalDrive(double x, double y, double rotation, double power){
-        double FLPower = y + x + rotation;
+        double FLPower = y + x - rotation;
         double FRPower = y - x - rotation;
         double BLPower = y - x + rotation;
-        double BRPower = y + x - rotation;
+        double BRPower = y + x + rotation;
 
 
         motorInputs = new double[]{FLPower * FLmulti, FRPower * FRmulti, BLPower * BLmulti, BRPower * BRmulti};
@@ -122,7 +118,7 @@ public class MecanumDrive {
 
         if(maxPower > 1) {
             for (int i = 0; i < 4; i++) {
-                motorInputs[i] = (double) motorInputs[i] / maxPower;
+                motorInputs[i] = motorInputs[i] / maxPower;
             }
         }
 
