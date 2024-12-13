@@ -4,6 +4,8 @@ import android.widget.Button;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,10 +14,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 @TeleOp(name = "Horizontal Slides TeleOp")
 public class HorizontalSlidesTeleOp extends OpMode {
     ButtonToggle leftBumper;
-    ButtonToggle rightBumper;
     ButtonToggle a1Bumper;
-    ButtonToggle x1Bumper;
-    ButtonToggle y1Bumper;
     Servo horizontalRight;
     Servo horizontalLeft;
     Timer timer;
@@ -23,19 +22,22 @@ public class HorizontalSlidesTeleOp extends OpMode {
     double maxEntensionTime = 2.5;
     double maxRetractionTime = 2.5;
     boolean rumble = false;
+    CRServo crHorizontalLeft;
+    CRServo crHorizontalRight;
 
     @Override
     public void init() {
-        horizontalLeft = hardwareMap.get(Servo.class, "Horizontal Slides Left");
+        crHorizontalLeft = hardwareMap.get(CRServo.class, "Horizontal Slides Left");
+        crHorizontalRight = hardwareMap.get(CRServo.class, "Horizontal Slides Right");
+
+        //idk why direction doesnt work too well
+        crHorizontalLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        crHorizontalRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftBumper = new ButtonToggle();
-        rightBumper = new ButtonToggle();
-        a1Bumper = new ButtonToggle();
-        x1Bumper = new ButtonToggle();
-        y1Bumper = new ButtonToggle();
+
     }
 
-    boolean close = false;
     double maxTimeOpen = 0;
     double maxTimeClose = 0;
     double leftTriggerPos = 0;
@@ -47,44 +49,58 @@ public class HorizontalSlidesTeleOp extends OpMode {
     @Override
 
     public void loop() {
+        double upperValue = (gamepad1.left_stick_x + 3.0) / 4.0; //0.5 - 1
+        double bottomValue = (gamepad1.left_stick_x + 1.0) / 4.0;//0 - 0.5
 
-        if(gamepad1.left_trigger != 0) {
-            leftTriggerPos = gamepad1.left_trigger;
-            previousTriggerVal = leftTriggerPos;
+        if(forward == true){
+            crHorizontalLeft.setPower(upperValue);
+            crHorizontalRight.setPower(bottomValue);
         }
+        else{
+            crHorizontalLeft.setPower(bottomValue);
+            crHorizontalRight.setPower(upperValue);
+        }
+
+
         if(a1Bumper.update(gamepad1.a)){
             forward = !forward;
         }
+//
+//        if(forward) {
+//            this.extend(leftTriggerPos);
+//            leftTriggerPos = 0;
+//        }
+//        else{
+//            this.retract(leftTriggerPos);
+//            leftTriggerPos = 0;
+//        }
+//
+//        if(x1Bumper.update(gamepad1.x)){
+//            overallTimer = new Timer();
+//            this.extend(1);
+//            overallTimeExtend = overallTimer.updateTime();
+//        }
+//
+//        if(y1Bumper.update(gamepad1.y)){
+//            overallTimer = new Timer();
+//            this.retract(1);
+//            overallTimeRetract = overallTimer.updateTime();
+//        }
 
-        if(forward) {
-            this.extend(leftTriggerPos);
-            leftTriggerPos = 0;
-        }
-        else{
-            this.retract(leftTriggerPos);
-            leftTriggerPos = 0;
-        }
-
-        if(x1Bumper.update(gamepad1.x)){
-            overallTimer = new Timer();
-            this.extend(1);
-            overallTimeExtend = overallTimer.updateTime();
-        }
-
-        if(y1Bumper.update(gamepad1.y)){
-            overallTimer = new Timer();
-            this.retract(1);
-            overallTimeRetract = overallTimer.updateTime();
-        }
 
 
+        telemetry.addLine("-----------------");
+        telemetry.addData("Direction", forward == true ? "Extend" : "Retract");
+        telemetry.addData("Left Power", forward == true ? upperValue : bottomValue);
+        telemetry.addData("Right Power", forward == true ? bottomValue : upperValue);
 
-        telemetry.addData("Forward", forward);
+        telemetry.addLine("-----------------");
         telemetry.addData("Max Time Open", maxTimeOpen);
         telemetry.addData("Max Time Close", maxTimeClose);
         telemetry.addData("Left Trigger Pos", previousTriggerVal);
         telemetry.addData("Rumble", rumble);
         telemetry.addData("Rumble Time", rumbleTime);
+        telemetry.addLine("-----------------");
 
         telemetry.addData("Overall Time Extend", overallTimeExtend);
         telemetry.addData("Overall Time Retract", overallTimeRetract);
@@ -96,7 +112,7 @@ public class HorizontalSlidesTeleOp extends OpMode {
 
 
 
-    public void extend(double percent) {
+    public void extendByTime(double percent) {
         timer = new Timer();
         double totalTime = percent * maxEntensionTime;
         double currentTime = timer.updateTime();
@@ -120,7 +136,7 @@ public class HorizontalSlidesTeleOp extends OpMode {
 
 
     int rumbleTime = 0;
-    public void retract(double percent){
+    public void retractByTime(double percent){
         timer = new Timer();
         double totalTime = percent * maxRetractionTime;
         double currentTime = timer.updateTime();
@@ -145,7 +161,7 @@ public class HorizontalSlidesTeleOp extends OpMode {
 
     public void stop(){
         horizontalLeft.setPosition(0.5);
-
+        horizontalRight.setPosition(0.5);
     }
     public double getLeftPosition(){
         return horizontalLeft.getPosition();

@@ -11,23 +11,23 @@ import org.firstinspires.ftc.teamcode.ColorSensor.SampleColors;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-//@TeleOp(name = "ClawWithArm2")
+@TeleOp(name = "ClawWithArm")
 public class ClawWithArm extends OpMode {
     // Hardware components
     private Servo grabServo;
     private Servo armServoLeft;
     private Servo armServoRight;
-    private ColorSensor colorSensor;
-
-    // Helper classes
-    private ColorSensorWrapper colorSensorWrapper;
+//    private ColorSensor colorSensor;
+//
+//    // Helper classes
+//    private ColorSensorWrapper colorSensorWrapper;
     private Timer timer;
 
     // Servo positions
     public static double grabOpen = 0.4;
     public static double grabClosed = 0.8;
     public static double grabNeutral = 0.6; // Adjusted for neutral position
-    private SampleColors.Colors detected = SampleColors.Colors.NONE;
+
 
     // Arm servo bounds
     private final double[] LEFTBounds = {0.3, 0.7}; // Closed, Open
@@ -39,11 +39,10 @@ public class ClawWithArm extends OpMode {
         grabServo = hardwareMap.get(Servo.class, "claw grabber");
         armServoLeft = hardwareMap.get(Servo.class, "arm servo left");
         armServoRight = hardwareMap.get(Servo.class, "arm servo right");
-        colorSensor = hardwareMap.get(ColorSensor.class, "claw color sensor");
 
-        // Initialize helpers
-        colorSensorWrapper = new ColorSensorWrapper(colorSensor, 2);
-        timer = new Timer();
+//        // Initialize helpers
+//        colorSensorWrapper = new ColorSensorWrapper(colorSensor, 2);
+//        timer = new Timer();
 
         // Set initial servo positions
         grabServo.setPosition(grabNeutral);
@@ -54,12 +53,12 @@ public class ClawWithArm extends OpMode {
     @Override
     public void loop() {
         // Update color sensor and telemetry
-        colorSensorWrapper.update();
-        RGBColor rgbColor = colorSensorWrapper.getValue();
-        detected = ColorClassifier.classify(rgbColor);
+//        colorSensorWrapper.update();
+//        RGBColor rgbColor = colorSensorWrapper.getValue();
+//        detected = ColorClassifier.classify(rgbColor);
 
-        telemetry.addData("Color Classification", detected);
-        telemetry.addData("RGBA", rgbColor.toString());
+//        telemetry.addData("Color Classification", detected);
+//        telemetry.addData("RGBA", rgbColor.toString());
         telemetry.addData("Current Time", timer.updateTime());
         telemetry.addData("Update Rate", 1 / timer.getDeltaTime());
 
