@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.Pose;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp(name = "PID Test")
+//@TeleOp(name = "PID Test")
 public class PIDTest extends OpMode {
 
     PIDBasic pidBasic;

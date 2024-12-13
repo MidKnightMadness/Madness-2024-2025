@@ -167,14 +167,6 @@ public class VerticalSlides {
         this.update(12);
     }
 
-    public void horizontalSlidesControl(double xLStick){
-        if (xLStick > 0){
-            //slides.setDirection(Servo.Direction.FORWARD);
-        }
-        else if (xLStick < 0){
-            //slides.setDirection(Servo.Direction.REVERSE);
-        }
-    }
 
 }
 

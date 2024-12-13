@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp(name = "Distance Sensor Test")
+//@TeleOp(name = "Distance Sensor Test")
 public class DistanceSensorTest extends OpMode {
 
     DistanceSensor distanceSensor;

@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 
-@Config
-@TeleOp(name = "Odometry Test")
+//@Config
+//@TeleOp(name = "Odometry Test")
 public class OdometryTest extends OpMode{
 
     MecanumDrive mecanumDrive;

@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 
-
-
 public class DeadReckoningDrive {
     DcMotor fr;
     DcMotor fl;

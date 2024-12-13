@@ -115,6 +115,7 @@ public class MecanumDrive {
         double maxPower = 0;
 
 
+
         for(int i = 0; i < 4; i++){
             maxPower = Math.max(maxPower, motorInputs[i]);
         }
@@ -130,6 +131,7 @@ public class MecanumDrive {
         for(int i = 0; i < 4; i++) {
             motorVelocity[i] = motorInputs[i] / timer.getDeltaTime();
         }
+
 
     }
 

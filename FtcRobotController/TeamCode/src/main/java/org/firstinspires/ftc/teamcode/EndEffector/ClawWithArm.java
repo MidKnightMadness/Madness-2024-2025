@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ColorSensor.SampleColors;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
 
-@TeleOp(name = "ClawWithArm2")
+//@TeleOp(name = "ClawWithArm2")
 public class ClawWithArm extends OpMode {
     // Hardware components
     private Servo grabServo;

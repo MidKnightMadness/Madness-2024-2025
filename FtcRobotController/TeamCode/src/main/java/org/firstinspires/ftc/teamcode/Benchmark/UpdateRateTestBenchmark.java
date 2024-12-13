@@ -14,7 +14,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
-@TeleOp(name = "Update Rate Benchmark", group = "Benchmarks")
+//@TeleOp(name = "Update Rate Benchmark", group = "Benchmarks")
 
 public class UpdateRateTestBenchmark extends OpMode {
     BufferedWriter bufferedWriter;
