@@ -18,9 +18,9 @@ public class FarAutoDirect extends AutoDrive{
 
         deadReckoningDrive.setMotorVelocitiesForTime(5, 0.5, 0, 0, 1000, telemetry);
     }
+
     @Override
-    public void loop(){
-
+    public void start() {
+        park();
     }
-
 }

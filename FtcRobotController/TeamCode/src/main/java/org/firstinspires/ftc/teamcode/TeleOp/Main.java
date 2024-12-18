@@ -168,7 +168,6 @@ public class Main extends OpMode implements ServoPositions {
     public void handleManipulatorControls() {
         //helpful presets
         if(A1.update(gamepad1.a)){
-            armServoLeft.setPosition(ServoPositions.armServoLeftSpecimen);
             armServoRight.setPosition(ServoPositions.armServoRightSpecimen);
 
 //            verticalSlides.extendToDistance(armSpecimenHeight);

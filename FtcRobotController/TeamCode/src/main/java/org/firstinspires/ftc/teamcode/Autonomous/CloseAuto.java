@@ -6,12 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "Close Auto")
 public class CloseAuto extends AutoDrive{
 
-    double moveRightTime = 2.5;
     @Override
     public void park() {
+        deadReckoningDrive.setMotorVelocitiesForTime(2.5, 0.5, 0, 0, 1000, telemetry);
+    }
 
-        deadReckoningDrive.setMotorVelocitiesForTime(moveRightTime, 0.5, 0, 0, 1000, telemetry);
-
+    @Override
+    public void start() {
+        park();
     }
 
     @Override

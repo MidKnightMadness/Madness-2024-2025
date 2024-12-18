@@ -18,9 +18,10 @@ public class FarAutoPush extends AutoDrive{
 
         deadReckoningDrive.setMotorVelocitiesForTime(13, 0.8, 0, 0, 1000, telemetry);
     }
-    @Override
-    public void loop(){
 
+    @Override
+    public void start() {
+        park();
     }
 
 }
