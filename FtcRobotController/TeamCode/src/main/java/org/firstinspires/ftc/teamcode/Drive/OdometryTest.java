@@ -2,21 +2,14 @@ package org.firstinspires.ftc.teamcode.Drive;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.teamcode.Drive.OdometryArc;
-import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
-import org.firstinspires.ftc.teamcode.Helper.Timer;
 
 
 //@Config
@@ -25,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Helper.Timer;
 public class OdometryTest extends OpMode{
 
     MecanumDrive mecanumDrive;
-    OdometryLinear linearOdo;
+    ThreeWheelOdometry linearOdo;
     OdometryArc odometryArc;
     ButtonToggle left1Bumper, right1Bumper;
 
@@ -40,7 +33,7 @@ public class OdometryTest extends OpMode{
         left1Bumper = new ButtonToggle();
         right1Bumper = new ButtonToggle();
 
-        linearOdo = new OdometryLinear(hardwareMap, telemetry, new double[]{7.75,7.25, Math.toRadians(90)});
+        linearOdo = new ThreeWheelOdometry(hardwareMap, telemetry, new double[]{7.75,7.25, Math.toRadians(90)});
 
         odometryArc = new OdometryArc(hardwareMap, telemetry, new double[]{7.25, 7.25, Math.toRadians(90)});
         RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD;  // logo facing up

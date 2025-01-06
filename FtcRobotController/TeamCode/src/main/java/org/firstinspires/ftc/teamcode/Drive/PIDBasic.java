@@ -4,7 +4,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 public class PIDBasic {
-    OdometryLinear odometry;
+    ThreeWheelOdometry odometry;
     private Telemetry telemetry;
     //Madness Chassis Into the Deep
     double[] P = new double[]{0.01, 0.01, 0.01};
@@ -26,10 +26,10 @@ public class PIDBasic {
     double maxIntegralSum = 0.5;
 
 
-    public PIDBasic(OdometryLinear odometryLinear, double targetX, double targetY, double targetAngle, Telemetry telemetry){
-        this.odometry = odometryLinear;
+    public PIDBasic(ThreeWheelOdometry threeWheelOdometry, double targetX, double targetY, double targetAngle, Telemetry telemetry){
+        this.odometry = threeWheelOdometry;
 
-        initialDistanceToTarget = Math.sqrt(Math.pow(targetX - odometryLinear.getXCoordinate(),2) + Math.pow(targetY-odometryLinear.getYCoordinate(), 2));
+        initialDistanceToTarget = Math.sqrt(Math.pow(targetX - threeWheelOdometry.getXCoordinate(),2) + Math.pow(targetY- threeWheelOdometry.getYCoordinate(), 2));
         targetStates[0] = targetX;
         targetStates[1] = targetY;
         targetStates[2] = getRotationRadians(targetAngle);

@@ -9,12 +9,10 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.ColorSensor.ColorClassifier;
 import org.firstinspires.ftc.teamcode.ColorSensor.ColorSensorWrapper;
 import org.firstinspires.ftc.teamcode.ColorSensor.SampleColors;
 import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Drive.OdometryLinear;
 import org.firstinspires.ftc.teamcode.EndEffector.ServoPositions;
 import org.firstinspires.ftc.teamcode.Helper.ButtonToggle;
 import org.firstinspires.ftc.teamcode.Helper.RGBColor;
@@ -22,7 +20,6 @@ import org.firstinspires.ftc.teamcode.Slides.HorizontalSlides;
 import org.firstinspires.ftc.teamcode.Slides.VerticalSlides;
 
 import org.firstinspires.ftc.teamcode.Helper.Timer;
-import org.opencv.video.SparseOpticalFlow;
 
 
 @TeleOp(group= "Game", name = "Driver Controlled TeleOp")
