@@ -13,8 +13,10 @@ public class FarAuto extends AutoDrive{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        deadReckoningDrive.setMotorVelocitiesForTime(1.5, -0.5, 0, 0, 1000, telemetry);
+        deadReckoningDrive.setMotorVelocitiesForTime(1.5, -0.5, 0, 0, 1000, telemetry);
 
-        deadReckoningDrive.setMotorVelocitiesForTime(timeForward, 0, 0.5, 0, 1000, telemetry);
+        deadReckoningDrive.setMotorVelocitiesForTime(1.5, 0, 0.5, 0, 1000, telemetry);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -31,50 +33,11 @@ public class FarAuto extends AutoDrive{
             throw new RuntimeException(e);
         }
 
-        deadReckoningDrive.setMotorVelocitiesForTime(timeBack, 0, -0.5, 0, 1000, telemetry);
+        deadReckoningDrive.setMotorVelocitiesForTime(2, 0, -0.5, 0, 1000, telemetry);
     }
 
     @Override
-    public void loop(){
-
-//        if(timer.updateTime() < timeForward) {
-//            mecanumDrive.velocityDrive(0, 0.4, 0, 1000);
-//        }
-//
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        //backward
-//
-//        if(timer.updateTime() > (timeForward ) && timer.updateTime() < (timeForward + timeBack )) {
-//            mecanumDrive.velocityDrive(0, -0.3, 0, 1000);
-//        }
-//
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if(timer.updateTime() > (timeForward + timeBack ) && timer.updateTime() < (timeForward + timeBack + timeRight)){
-//            mecanumDrive.velocityDrive(0.3, 0, 0, 1000);
-//        }
-//        else {
-//            mecanumDrive.setPowers(0, 0, 0, 0, 0);
-//        }
-//
-//        //wait
-//        try {
-//            Thread.sleep(2500);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        if(timer.updateTime() > (timeRight + timeForward + timeBack )) {
-//            mecanumDrive.setPowers(0, 0, 0, 0, 0);
-//        }
+    public void start() {
+        park();
     }
-
 }
