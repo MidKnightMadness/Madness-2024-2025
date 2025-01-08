@@ -1,30 +1,44 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helper.IMUWrapper;
 import org.firstinspires.ftc.teamcode.Helper.Timer;
+import org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.PathingRR.Drive.SampleOpModes.TrackingWheelLateralDistanceTuner;
+
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TwoWheelOdometry {
     IMUWrapper imu;
     public DcMotor yEncoder;
     public DcMotor xEncoder;
     Timer timer;
-    Telemetry telemetry;
+
+    double LateralMultiplier = 1;
 
     final double WHEEL_RADIUS_MM = 16;
 
+    final double trackDistance = 12.1;//in //11 for old chassis
+    final double distVertEncoders = 4.2;//in
     double xCoordinate;
     double yCoordinate;
 
     double IN_PER_TICK = 2 * WHEEL_RADIUS_MM * Math.PI / 25.4 / 2000d;
+    Pose2d startingPos;
+    double[] previousEncoderVals;
 
-    public TwoWheelOdometry(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
+
+    public TwoWheelOdometry(HardwareMap hardwareMap, Pose2d startingPosition, Telemetry telemetry) {
+        startingPos = startingPosition;
+        previousEncoderVals = new double[2];
+
         imu = new IMUWrapper(hardwareMap, telemetry);
         imu.calibrateBiases();
 
@@ -44,9 +58,14 @@ public class TwoWheelOdometry {
     long lastYTicks;
     double yaw;
     double lastYaw;
+    double currentTime;
+    double previousTime;
+    double deltaTime;
     public void update() {
         imu.update();
         yaw = imu.getYaw();
+        currentTime = timer.updateTime();
+        deltaTime = currentTime - previousTime;
 
         long currentXTicks = xEncoder.getCurrentPosition();
         long currentYTicks = yEncoder.getCurrentPosition();
@@ -54,10 +73,14 @@ public class TwoWheelOdometry {
         long deltaXTicks = currentXTicks - lastXTicks;
         long deltaYTicks = currentYTicks - lastYTicks;
 
-        double deltaXInches = IN_PER_TICK * deltaXTicks;
-        double deltaYInches = IN_PER_TICK * deltaYTicks;
 
         double tempYaw = (yaw + lastYaw) / 2;
+
+        double deltaXInches = IN_PER_TICK * deltaYTicks;
+        //ignore delta theta
+        double deltaYInches = -IN_PER_TICK * (deltaXTicks - distVertEncoders * (deltaYTicks) / trackDistance);
+
+
         xCoordinate += deltaXInches * Math.cos(tempYaw) - deltaYInches * Math.sin(tempYaw);
         yCoordinate += deltaXInches * Math.sin(tempYaw) + deltaYInches * Math.cos(tempYaw);
 
@@ -65,6 +88,7 @@ public class TwoWheelOdometry {
         lastYTicks = currentYTicks;
 
         lastYaw = yaw;
+        previousTime = currentTime;
     }
 
     public double getXCoordinate() {
@@ -86,4 +110,29 @@ public class TwoWheelOdometry {
         xEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         yEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public List<Double> getWheelVelocities() {
+        double deltaLeftTicks = yEncoder.getCurrentPosition() - previousEncoderVals[0];
+        double deltaFrontTicks = xEncoder.getCurrentPosition() - previousEncoderVals[1];
+
+        double leftWheelVelocity = IN_PER_TICK * deltaLeftTicks / deltaTime;
+        double frontWheelVelocity = IN_PER_TICK * deltaFrontTicks / deltaTime;
+
+        return Arrays.asList(leftWheelVelocity, frontWheelVelocity);
+
+    }
+
+    public double getTrackWidth() {
+        return trackDistance;
+    }
+
+    public double getWheelBase() {
+        return DriveConstants.WHEEL_BASE;
+    }
+
+    public double getLateralMultiplier() {
+        return LateralMultiplier;
+    }
+
+
 }

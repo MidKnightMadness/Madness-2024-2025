@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.PathingRR.Drive.SampleMecanumDrive;
  * This is a simple routine to test translational drive capabilities.
  */
 @Config
-@Autonomous(group = "drive")
+@Autonomous(group = "drive", name = "Straight")
 public class StraightTest extends LinearOpMode {
     public static double DISTANCE = 60; // in
 
@@ -23,7 +23,7 @@ public class StraightTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
 
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE)

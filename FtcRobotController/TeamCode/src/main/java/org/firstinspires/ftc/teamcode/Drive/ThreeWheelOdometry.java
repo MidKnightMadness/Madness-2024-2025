@@ -258,7 +258,7 @@ public class ThreeWheelOdometry {
     }
 
     public double getTrackWidth() {
-        return DriveConstants.TRACK_WIDTH;
+        return trackDistance;
     }
 
     public double getWheelBase() {

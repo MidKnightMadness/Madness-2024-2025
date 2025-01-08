@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import com.acmerobotics.roadrunner.kinematics.MecanumKinematics;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
@@ -14,7 +14,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-import org.firstinspires.ftc.teamcode.Drive.ThreeWheelOdometry;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import org.firstinspires.ftc.teamcode.Drive.TwoWheelOdometry;
 import org.firstinspires.ftc.teamcode.PathingRR.Util.Encoder;
 
 import java.util.Arrays;
@@ -44,11 +46,11 @@ public class StandardTrackingWheelLocalizer implements Localizer {
 
     private Pose2d poseEstimate;
     private Pose2d poseVelocity;
-    public ThreeWheelOdometry odometry;
+    public TwoWheelOdometry odometry;
 
-    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, double[] startingPosition) {
+    public StandardTrackingWheelLocalizer(HardwareMap hardwareMap, Pose2d startingPosition, Telemetry telemetry) {
 
-        odometry = new ThreeWheelOdometry(hardwareMap, startingPosition);
+        odometry = new TwoWheelOdometry(hardwareMap, startingPosition, telemetry);
 
     }
 
@@ -59,7 +61,7 @@ public class StandardTrackingWheelLocalizer implements Localizer {
     }
 
     public Pose2d getPoseEstimate(){
-        return new Pose2d(odometry.getXCoordinate(), odometry.getYCoordinate(), odometry.getRotationRadians());
+        return new Pose2d(odometry.getXCoordinate(), odometry.getYCoordinate(), odometry.getYaw());
     }
 
 
@@ -69,7 +71,7 @@ public class StandardTrackingWheelLocalizer implements Localizer {
 
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
-
+        poseEstimate = pose2d;
     }
 
     @Nullable

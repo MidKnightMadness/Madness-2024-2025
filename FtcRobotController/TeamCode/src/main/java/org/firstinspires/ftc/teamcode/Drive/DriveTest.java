@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Drive;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -60,7 +61,7 @@ public class DriveTest extends OpMode implements ServoPositions {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        odometry = new TwoWheelOdometry(hardwareMap, telemetry);
+        odometry = new TwoWheelOdometry(hardwareMap, new Pose2d(0,0,Math.PI/2), telemetry);
 
         leftServo = hardwareMap.get(CRServo.class, "leftHorizontal");
 //        rightServo = hardwareMap.get(CRServo.class, "Horizontal Slides Right");

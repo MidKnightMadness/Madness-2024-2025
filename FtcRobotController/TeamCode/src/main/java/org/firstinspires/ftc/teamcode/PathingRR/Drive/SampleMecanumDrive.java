@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.PathingRR.Drive;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.MAX_ACCEL;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.MAX_ANG_ACCEL;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.MAX_ANG_VEL;
@@ -39,6 +40,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 //import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.PathingRR.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.PathingRR.TrajectorySequence.TrajectorySequenceBuilder;
@@ -82,7 +84,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {
+    public SampleMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -143,7 +145,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
-         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, new double[]{0,0, Math.PI / 2}));
+         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, new Pose2d(0,0, Math.PI / 2), telemetry));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
