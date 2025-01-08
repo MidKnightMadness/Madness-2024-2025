@@ -14,7 +14,7 @@ public class FarAuto extends AutoDrive{
             throw new RuntimeException(e);
         }
         deadReckoningDrive.setMotorVelocitiesForTime(1.5, -0.5, 0, 0, 1000, telemetry);
-        deadReckoningDrive.setMotorVelocitiesForTime(1.5, -0.5, 0, 0, 1000, telemetry);
+        deadReckoningDrive.setMotorVelocitiesForTime(1.5, 0.5, 0, 0, 1000, telemetry);
 
         deadReckoningDrive.setMotorVelocitiesForTime(1.5, 0, 0.5, 0, 1000, telemetry);
         try {

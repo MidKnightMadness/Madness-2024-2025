@@ -57,7 +57,15 @@ public class IMUWrapper
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
-    final double biasCalibrationTime = 0.5d;
+    double normalizeAngle(double angle) {
+        return mod((angle + 180), 360) - 180;
+    }
+
+    double mod(double num, double divisor) {
+        return num - Math.floor(num / divisor) * divisor;
+    }
+
+    final double biasCalibrationTime = 0d;
 
     double[] imuBiases = new double[6];
     double yawVelBias;
@@ -99,7 +107,7 @@ public class IMUWrapper
     }
 
     public double getUncorrectedYaw() {
-        return imu.getRobotYawPitchRollAngles().getYaw();
+        return normalizeAngle(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
     }
 
 

@@ -24,6 +24,13 @@ public class TwoWheelOdometry {
     double LateralMultiplier = 1;
 
     final double WHEEL_RADIUS_MM = 16;
+    final double CENTER_ODOMETRY_DISTANCE_MM = 32;
+    final double VERTICAL_ODOMETRY_DISTANCE_MM = 138.7896;
+
+    final double CENTER_ARC_90_DEG = 2.7943;
+    final double VERTICAL_ARC_90_DEG = 10.7398;
+
+    final double IN_PER_MM = 0.0393701;
 
     final double trackDistance = 12.1;//in //11 for old chassis
     final double distVertEncoders = 4.2;//in
@@ -40,7 +47,6 @@ public class TwoWheelOdometry {
         previousEncoderVals = new double[2];
 
         imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
 
         yEncoder = hardwareMap.get(DcMotor.class, "yEncoder");
         yEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -65,6 +71,7 @@ public class TwoWheelOdometry {
         imu.update();
         yaw = imu.getYaw();
         currentTime = timer.updateTime();
+
         deltaTime = currentTime - previousTime;
 
         long currentXTicks = xEncoder.getCurrentPosition();
@@ -76,13 +83,19 @@ public class TwoWheelOdometry {
 
         double tempYaw = (yaw + lastYaw) / 2;
 
-        double deltaXInches = IN_PER_TICK * deltaYTicks;
-        //ignore delta theta
-        double deltaYInches = -IN_PER_TICK * (deltaXTicks - distVertEncoders * (deltaYTicks) / trackDistance);
+        double deltaYaw = yaw - lastYaw;
+        double deltaXInches = IN_PER_TICK * deltaXTicks;
+        double deltaYInches = IN_PER_TICK * deltaYTicks;
 
+        // arcs from center of rotation
+        deltaXInches += deltaYaw * IN_PER_MM * CENTER_ODOMETRY_DISTANCE_MM;
+        deltaYInches += deltaYaw * IN_PER_MM * VERTICAL_ODOMETRY_DISTANCE_MM;
 
-        xCoordinate += deltaXInches * Math.cos(tempYaw) - deltaYInches * Math.sin(tempYaw);
-        yCoordinate += deltaXInches * Math.sin(tempYaw) + deltaYInches * Math.cos(tempYaw);
+//        xCoordinate += deltaXInches * Math.cos(tempYaw) - deltaYInches * Math.sin(tempYaw);
+//        yCoordinate += deltaXInches * Math.sin(tempYaw) + deltaYInches * Math.cos(tempYaw);
+
+        xCoordinate += deltaXInches;
+        yCoordinate += deltaYInches;
 
         lastXTicks = currentXTicks;
         lastYTicks = currentYTicks;
@@ -119,7 +132,6 @@ public class TwoWheelOdometry {
         double frontWheelVelocity = IN_PER_TICK * deltaFrontTicks / deltaTime;
 
         return Arrays.asList(leftWheelVelocity, frontWheelVelocity);
-
     }
 
     public double getTrackWidth() {
