@@ -97,7 +97,7 @@ public class IMUWrapper
 
 
     public double getYaw() {
-        return getExpansionHubYaw() + Math.PI / 2;
+        return getExpansionHubYaw();
     }
 
     public double getControlHubYaw() {
