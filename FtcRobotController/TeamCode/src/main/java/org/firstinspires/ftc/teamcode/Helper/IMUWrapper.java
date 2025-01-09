@@ -28,25 +28,44 @@
  */
 
 package org.firstinspires.ftc.teamcode.Helper;
+import com.qualcomm.hardware.bosch.BHI260IMU;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class IMUWrapper
 {
-    IMU imu;
+    IMU imuControlHub;
+    BNO055IMU imuExpansionHub;
+
     Telemetry telemetry;
     Timer timer;
 
     double yaw = 0;
 
     public IMUWrapper(HardwareMap hardwareMap, Telemetry telemetry) {
-        imu = hardwareMap.get(IMU.class, "imu");
+        BNO055IMU.Parameters expansionIMUParameters = new BNO055IMU.Parameters();
+        expansionIMUParameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
+        expansionIMUParameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        expansionIMUParameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample OpMode
+        expansionIMUParameters.loggingEnabled      = true;
+        expansionIMUParameters.loggingTag          = "IMU";
+        expansionIMUParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imuControlHub = hardwareMap.get(IMU.class, "imuControl");
+        imuExpansionHub = hardwareMap.get(BNO055IMU.class, "imuExpansion");
+
         this.telemetry = telemetry;
 
         timer = new Timer();
@@ -54,14 +73,16 @@ public class IMUWrapper
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
+        imuControlHub.initialize(new IMU.Parameters(orientationOnRobot));
+        imuExpansionHub.initialize(expansionIMUParameters);
     }
 
-    double normalizeAngle(double angle) {
-        return mod((angle + 180), 360) - 180;
+    public static double normalizeAngle(double angle) {
+        return mod((angle + Math.PI), 2 * Math.PI) - Math.PI;
     }
 
-    double mod(double num, double divisor) {
+
+    public static double mod(double num, double divisor) {
         return num - Math.floor(num / divisor) * divisor;
     }
 
@@ -81,7 +102,7 @@ public class IMUWrapper
         int numSamples = 0;
 
         while (timer.updateTime() < startTime + biasCalibrationTime) {
-            sumIMUYawVel += imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+            sumIMUYawVel += imuControlHub.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
             numSamples += 1;
         }
 
@@ -92,10 +113,15 @@ public class IMUWrapper
 
     public void update() {
         timer.updateTime();
-        double yawVel = imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate - yawVelBias;
-        double deltaYaw = timer.getDeltaTime() * (yawVel + lastYawVel);
+
+        double controlHubVel = imuControlHub.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        double expansionHubVel = imuExpansionHub.getAngularVelocity().zRotationRate;
+        double yawVel = (controlHubVel + expansionHubVel) / 2;
+        double deltaYaw = timer.getDeltaTime() * (yawVel + lastYawVel) / 2;
 
         yaw += deltaYaw;
+
+        lastYawVel = yawVel;
     }
 
     public double getYawVelBias() {
@@ -103,13 +129,16 @@ public class IMUWrapper
     }
 
     public double getYaw() {
-        return yaw;
+        return getExpansionHubYaw();
     }
 
-    public double getUncorrectedYaw() {
-        return normalizeAngle(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+    public double getControlHubYaw() {
+        return imuControlHub.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
+    public double getExpansionHubYaw() {
+        return imuExpansionHub.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+    }
 
 //    public void logData() {
 //        telemetry.addData("Hub orientation", "Logo=%s   USB=%s\n ", logoDirection, usbDirection);
