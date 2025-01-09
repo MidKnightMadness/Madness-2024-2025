@@ -48,13 +48,11 @@ public class IMUWrapper
 {
     IMU imuControlHub;
     BNO055IMU imuExpansionHub;
-
-    Telemetry telemetry;
     Timer timer;
 
     double yaw = 0;
 
-    public IMUWrapper(HardwareMap hardwareMap, Telemetry telemetry) {
+    public IMUWrapper(HardwareMap hardwareMap) {
         BNO055IMU.Parameters expansionIMUParameters = new BNO055IMU.Parameters();
         expansionIMUParameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
         expansionIMUParameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -65,8 +63,6 @@ public class IMUWrapper
 
         imuControlHub = hardwareMap.get(IMU.class, "imuControl");
         imuExpansionHub = hardwareMap.get(BNO055IMU.class, "imuExpansion");
-
-        this.telemetry = telemetry;
 
         timer = new Timer();
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -81,35 +77,10 @@ public class IMUWrapper
         return mod((angle + Math.PI), 2 * Math.PI) - Math.PI;
     }
 
-
     public static double mod(double num, double divisor) {
         return num - Math.floor(num / divisor) * divisor;
     }
-
-    final double biasCalibrationTime = 0d;
-
-    double[] imuBiases = new double[6];
-    double yawVelBias;
     double lastYawVel;
-
-    public void calibrateBiases() {
-        telemetry.addLine("Ensure the robot is not moving");
-        telemetry.addLine("Calibrating");
-        telemetry.update();
-
-        double startTime = timer.updateTime();
-        double sumIMUYawVel = 0;
-        int numSamples = 0;
-
-        while (timer.updateTime() < startTime + biasCalibrationTime) {
-            sumIMUYawVel += imuControlHub.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-            numSamples += 1;
-        }
-
-        yawVelBias = sumIMUYawVel / numSamples;
-        telemetry.addData("Yaw Velocity Bias", yawVelBias);
-        telemetry.update();
-    }
 
     public void update() {
         timer.updateTime();
@@ -124,35 +95,21 @@ public class IMUWrapper
         lastYawVel = yawVel;
     }
 
-    public double getYawVelBias() {
-        return yawVelBias;
-    }
 
     public double getYaw() {
-        return getExpansionHubYaw();
+        return getExpansionHubYaw() + Math.PI / 2;
     }
 
     public double getControlHubYaw() {
         return imuControlHub.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
+    public double getYawVelocity() {
+        return imuExpansionHub.getAngularVelocity().zRotationRate;
+    }
     public double getExpansionHubYaw() {
         return imuExpansionHub.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
-//    public void logData() {
-//        telemetry.addData("Hub orientation", "Logo=%s   USB=%s\n ", logoDirection, usbDirection);
-//        // Retrieve Rotational Angles and Velocities
-//        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-//        AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-//
-//        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-//        telemetry.addData("Pitch (X)", "%.2f Deg.", orientation.getPitch(AngleUnit.DEGREES));
-//        telemetry.addData("Roll (Y)", "%.2f Deg.\n", orientation.getRoll(AngleUnit.DEGREES));
-//        telemetry.addData("Yaw (Z) velocity", "%.2f Deg/Sec", angularVelocity.zRotationRate);
-//        telemetry.addData("Pitch (X) velocity", "%.2f Deg/Sec", angularVelocity.xRotationRate);
-//        telemetry.addData("Roll (Y) velocity", "%.2f Deg/Sec", angularVelocity.yRotationRate);
-//        telemetry.update();
-//    }
 
 }

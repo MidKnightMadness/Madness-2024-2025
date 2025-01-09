@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 //import org.firstinspires.ftc.teamcode.Drive.MecanumDrive;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Helper.IMUWrapper;
 import org.firstinspires.ftc.teamcode.PathingRR.TrajectorySequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.PathingRR.TrajectorySequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.PathingRR.TrajectorySequence.TrajectorySequenceRunner;
@@ -78,14 +79,15 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx FL, BL, BR, FR;
     private List<DcMotorEx> motors;
 
-    private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
 
+    IMUWrapper imu;
     public SampleMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+        imu = new IMUWrapper(hardwareMap);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
@@ -99,10 +101,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-        imu.initialize(parameters);
+
 
         FL = hardwareMap.get(DcMotorEx.class, "FL");
         BL = hardwareMap.get(DcMotorEx.class, "BL");
@@ -145,12 +144,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
-         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, new Pose2d(0,0, Math.PI / 2), telemetry));
+         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
+    }
+
+    public double getRawExternalHeading() {
+        return imu.getYaw();
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -306,15 +309,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         BR.setPower(v3);
     }
 
-    @Override
-    public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-    }
-
-    @Override
-    public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-    }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(

@@ -23,8 +23,8 @@ public class SampleBasketOpModeRR extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
+        imu = new IMUWrapper(hardwareMap);
+
 
         //TODO: Recheck if there are more servos
 

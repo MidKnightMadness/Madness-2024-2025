@@ -46,7 +46,7 @@ public class TwoWheelOdometry {
         startingPos = startingPosition;
         previousEncoderVals = new double[2];
 
-        imu = new IMUWrapper(hardwareMap, telemetry);
+        imu = new IMUWrapper(hardwareMap);
 
         yEncoder = hardwareMap.get(DcMotor.class, "yEncoder");
         yEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

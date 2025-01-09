@@ -31,8 +31,14 @@ public class LocalizationTest extends LinearOpMode {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("heading", thetaToDegrees(poseEstimate.getHeading()));
             telemetry.update();
         }
     }
+
+    public double thetaToDegrees(double theta){
+        return theta * 180 / Math.PI;
+    }
+
+
 }

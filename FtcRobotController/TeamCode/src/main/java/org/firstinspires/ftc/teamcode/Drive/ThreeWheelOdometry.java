@@ -33,8 +33,7 @@ public class ThreeWheelOdometry {
     IMUWrapper imu;
     ElapsedTime elapsedTime;
     public ThreeWheelOdometry(HardwareMap hardwareMap, Telemetry telemetry, double[] starting){
-        imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
+        imu = new IMUWrapper(hardwareMap);
 
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
@@ -64,8 +63,7 @@ public class ThreeWheelOdometry {
         elapsedTime.startTime();
     }
     public ThreeWheelOdometry(HardwareMap hardwareMap, double[] starting){
-        imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
+        imu = new IMUWrapper(hardwareMap);
 
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;

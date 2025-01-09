@@ -22,8 +22,7 @@ public class SamplePushOpModeRR extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
+        imu = new IMUWrapper(hardwareMap);
 
 
 

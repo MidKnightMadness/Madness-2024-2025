@@ -65,8 +65,7 @@ public class DriveTest extends OpMode implements ServoPositions {
 
         leftServo = hardwareMap.get(CRServo.class, "leftHorizontal");
 //        rightServo = hardwareMap.get(CRServo.class, "Horizontal Slides Right");
-        imu = new IMUWrapper(hardwareMap, telemetry);
-        imu.calibrateBiases();
+        imu = new IMUWrapper(hardwareMap);
         telemetry.update();
 
 //        clawServo.setPosition(ServoPositions.grabNeutral);
