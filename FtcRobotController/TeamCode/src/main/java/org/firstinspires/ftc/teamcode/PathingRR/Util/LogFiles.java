@@ -18,7 +18,6 @@ import org.firstinspires.ftc.ftccommon.external.WebHandlerRegistrar;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.PathingRR.Drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.PathingRR.Drive.StandardTrackingWheelLocalizer;
 
 import java.io.File;
 import java.io.FileInputStream;

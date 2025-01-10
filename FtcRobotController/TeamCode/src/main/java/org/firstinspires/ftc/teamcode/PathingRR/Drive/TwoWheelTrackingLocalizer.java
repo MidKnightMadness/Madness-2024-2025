@@ -34,16 +34,17 @@ import java.util.List;
  *
  */
 public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
+    public static final double LATERAL_DISTANCE = 0;
     public static double TICKS_PER_REV = 2000;
     public static double WHEEL_RADIUS = 16 / 25.4; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
 
     // TODO: add Parallel and Perpendicular Constants
-    public static double PARALLEL_X = 0; // X is the up and down direction
-    public static double PARALLEL_Y = 0; // Y is the strafe direction
+    public static double PARALLEL_X = -55.934 / 25.4; // X is the up and down direction
+    public static double PARALLEL_Y = 138.817 / 25.4; // Y is the strafe direction
 
-    public static double PERPENDICULAR_X = 0;
+    public static double PERPENDICULAR_X = 32 / 25.4;
     public static double PERPENDICULAR_Y = 0;
 
     // Parallel/Perpendicular to the forward axis
@@ -55,8 +56,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
     public TwoWheelTrackingLocalizer(HardwareMap hardwareMap, SampleMecanumDrive drive) {
         super(Arrays.asList(
-                new Pose2d(PARALLEL_X, PARALLEL_Y, Math.toRadians(90)),
-                new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, 0)
+                new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
+                new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
         ));
 
         this.drive = drive;
@@ -101,8 +102,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getRawVelocity()),
-                encoderTicksToInches(perpendicularEncoder.getRawVelocity())
+                encoderTicksToInches(parallelEncoder.getCorrectedVelocity()),
+                encoderTicksToInches(perpendicularEncoder.getCorrectedVelocity())
         );
     }
 }

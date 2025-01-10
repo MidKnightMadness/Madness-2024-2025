@@ -9,11 +9,12 @@ import org.firstinspires.ftc.teamcode.PathingRR.Drive.SampleMecanumDrive;
 
 @TeleOp(group = "drive", name = "LocalizationTest")
 public class LocalizationTest extends LinearOpMode {
+    double power = 0.5;
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap, telemetry);
 
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         drive.setPoseEstimate(new Pose2d(0.0, 0.0, Math.PI / 2));
 
@@ -22,11 +23,13 @@ public class LocalizationTest extends LinearOpMode {
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            gamepad1.left_stick_x,
-                            -gamepad1.left_stick_y,
-                            gamepad1.right_stick_x
+                            -power * gamepad1.left_stick_y,
+                            -power * gamepad1.left_stick_x,
+                            power * gamepad1.right_stick_x
                     )
             );
+
+
 
             drive.update();
 

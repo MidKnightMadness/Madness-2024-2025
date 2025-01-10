@@ -24,7 +24,7 @@ public class DriveConstants {
     public static final double TICKS_PER_REV = 1;
     public static final double MAX_RPM = 1;
 
-    public static final double WHEEL_BASE = 12;
+    public static final double WHEEL_BASE = 291.92/ 25.4;
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
      * Set this flag to false if drive encoders are not present and an alternative localization
@@ -47,7 +47,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 32/ 25.4; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 11.4; // in
+    public static double TRACK_WIDTH = 301.2/25.4; // in
 
 
     //Encoders

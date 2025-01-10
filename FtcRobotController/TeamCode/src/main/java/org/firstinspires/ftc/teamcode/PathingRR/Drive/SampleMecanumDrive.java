@@ -9,8 +9,9 @@ import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.MAX_
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.MOTOR_VELO_PID;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.RUN_USING_ENCODER;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.WHEEL_BASE;
+import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.encoderTicksToInches;
 import static org.firstinspires.ftc.teamcode.PathingRR.Drive.DriveConstants.rpmToVelocity;
-import static org.firstinspires.ftc.teamcode.PathingRR.Drive.StandardTrackingWheelLocalizer.encoderTicksToInches;
 
 import androidx.annotation.NonNull;
 
@@ -65,9 +66,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public static double LATERAL_MULTIPLIER = 1;
 
-    public static double VX_WEIGHT = 1;
-    public static double VY_WEIGHT = 1;
-    public static double OMEGA_WEIGHT = 1;
+    public static double VX_WEIGHT = 0.3;
+    public static double VY_WEIGHT = 0.3;
+    public static double OMEGA_WEIGHT = 0.3;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
@@ -86,7 +87,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     IMUWrapper imu;
     public SampleMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
-        super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+        super(kV, kA, kStatic, TRACK_WIDTH, WHEEL_BASE, LATERAL_MULTIPLIER);
         imu = new IMUWrapper(hardwareMap);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -111,6 +112,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         FR.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
+
         FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -121,7 +124,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        motors = Arrays.asList(FL, FL, BL, BR);
+        motors = Arrays.asList(FL, BL, BR, FR);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -153,6 +156,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public double getRawExternalHeading() {
+        imu.update();
         return imu.getYaw();
     }
 
